@@ -43,7 +43,8 @@ const languages = new Set([
 
 const tracks = new Set([
   "everyday", "professional", "both", "interview",
-  "meeting", "presentation", "roleplay", "grammar_vocab"
+  "meeting", "presentation", "roleplay", "grammar_vocab",
+  "power_vocab", "idioms_phrases"
 ]);
 
 const levels = new Set(["beginner", "intermediate", "advanced"]);
@@ -52,70 +53,80 @@ function getPreferences(body = {}) {
   return {
     language: languages.has(body.language) ? body.language : "Hindi",
     track: tracks.has(body.track) ? body.track : "both",
-    level: levels.has(body.level) ? body.level : "beginner"
+    level: levels.has(body.level) ? body.level : "intermediate"
   };
 }
 
 function buildInstructions({ language, track, level }) {
   const languageInstruction = language === "English"
     ? "Explain exclusively in clear, natural English."
-    : `Speak primarily in English. When explaining difficult vocabulary, grammar subtleties, or corrections, give a brief, natural explanation in ${language}. Do not translate every sentence; encourage the learner to think and speak in English.`;
+    : `Speak primarily in English. When explaining difficult vocabulary, power words, idioms, or corrections, give a brief, natural explanation in ${language}. Do not translate full sentences; help the learner think in English.`;
 
   let trackInstruction = "";
   switch (track) {
+    case "power_vocab":
+      trackInstruction = "Deep focus on VOCABULARY MASTERY. Whenever the learner speaks, introduce 1-2 powerful, sophisticated, or natural alternative words/expressions (e.g., upgrading basic words like 'very tired' to 'exhausted' or 'drained'). Explain the word briefly in " + language + ", give a crisp example, and challenge the learner to use it.";
+      break;
+    case "idioms_phrases":
+      trackInstruction = "Deep focus on NATIVE IDIOMS, PHRASAL VERBS, & COLLOCATIONS. Help the learner sound natural and conversational rather than textbook-formal. Teach common spoken expressions with brief context and meaning in " + language + ".";
+      break;
     case "interview":
-      trackInstruction = "Act as an experienced, supportive job interviewer. Ask realistic interview questions one by one (behavioral, technical, or situational). Coach the learner to structure answers effectively (e.g. using the STAR method), speak with confidence, and use professional vocabulary.";
+      trackInstruction = "Act as an experienced executive interviewer. Ask realistic interview questions one by one. Coach the learner on high-impact professional vocabulary, structuring answers (STAR method), and sounding confident and articulate.";
       break;
     case "meeting":
-      trackInstruction = "Simulate an agile corporate workplace meeting. Practice leading updates, agreeing or disagreeing diplomatically, clarifying action items, and expressing business ideas clearly.";
+      trackInstruction = "Simulate an agile corporate team meeting. Teach executive workplace vocabulary (e.g. leverage, bandwidth, bottleneck, pivot, streamline), diplomatic disagreement, and clear status updates.";
       break;
     case "presentation":
-      trackInstruction = "Coach the learner on presentation and pitch delivery. Focus on clear signposting ('First, let's look at...'), engaging hooks, smooth vocal transitions, and handling Q&A gracefully.";
+      trackInstruction = "Coach the learner on presentation delivery and storytelling. Teach signposting vocabulary, engaging rhetorical hooks, vocal transitions, and handling questions with authority.";
       break;
     case "roleplay":
-      trackInstruction = "Engage in vivid real-life role-play scenarios (e.g., negotiating with a client, ordering at a busy cafe, resolving customer disputes, checking into a hotel). Stay in character while subtly guiding English usage.";
+      trackInstruction = "Immerse in interactive real-life role-play scenarios (client negotiation, hotel, airport, cafe, job offer negotiation). Stay in character while subtly infusing rich conversational vocabulary.";
       break;
     case "grammar_vocab":
-      trackInstruction = "Act as an attentive language coach. Gently highlight grammatical errors, suggest more natural collocations and idioms, and teach high-impact vocabulary words in practical contexts.";
+      trackInstruction = "Act as an elite English language and vocabulary coach. Point out subtle grammar slip-ups gently, offer superior sentence alternatives, and upgrade the learner's vocabulary choice on every turn.";
       break;
     case "professional":
-      trackInstruction = "Focus on workplace and professional English: meetings, client communications, presentations, career discussions, and polite business tone.";
+      trackInstruction = "Focus on workplace and professional English: meetings, client communications, presentations, career discussions, and polished corporate vocabulary.";
       break;
     case "everyday":
-      trackInstruction = "Focus on practical daily conversations: making friends, small talk, ordering food, travel, hobbies, and casual storytelling.";
+      trackInstruction = "Focus on practical daily conversations: making friends, small talk, travel, storytelling, and casual native spoken expressions.";
       break;
     default:
-      trackInstruction = "Blend everyday communication with practical professional English. Adapt dynamically to the learner's conversational topics.";
+      trackInstruction = "Blend rich vocabulary acquisition with practical everyday and professional communication.";
   }
 
   const levelInstruction = level === "beginner"
-    ? "The learner is a beginner. Use simple sentence structures, clear common vocabulary, and a warm, patient pace. Offer gentle sentence starters when they seem unsure."
+    ? "The learner is a beginner. Keep sentences short, warm, and approachable. Introduce one new vocabulary word at a time with simple definitions."
     : level === "advanced"
-      ? "The learner is advanced. Encourage sophisticated vocabulary, nuanced idiomatic expressions, varied sentence variety, and executive presence."
-      : "The learner is intermediate. Use natural conversational pacing, introduce useful idiomatic collocations, and refine awkward phrasing.";
+      ? "The learner is advanced. Introduce nuanced C1/C2 vocabulary, complex collocations, rhetorical flair, and executive polish."
+      : "The learner is intermediate. Use natural conversational pacing, introduce high-utility idiomatic expressions, and refine awkward phrasing.";
 
-  return `You are VocaBuddy, a warm, encouraging, human-like AI English speaking coach.
+  return `You are VocaBuddy, a badass, supportive, high-energy AI English & Vocabulary Coach.
+PRIMARY MISSION:
+Transform the learner into a confident, articulate English speaker with an impressive, natural vocabulary.
+
 VOICE & CONVERSATIONAL STYLE:
-- Sound like a friendly, attentive speaking partner, never an academic lecturer or robotic IVR.
-- Use natural contractions (I'm, that's, let's, don't) and conversational rhythm.
-- Spoken responses MUST be concise: 1 to 3 short sentences, then ask exactly ONE engaging question to keep the conversation flowing.
-- Never write long paragraphs during back-and-forth turns. The response will be spoken aloud via text-to-speech.
-- Avoid robotic flattery (e.g. don't start every sentence with "Great job!"). Be genuine, warm, and specific.
+- Sound like an engaging, sharp, friendly speaking mentor. Never sound like a dusty textbook or scripted robot.
+- Use natural contractions (I'm, that's, let's, don't) and authentic conversational cadence.
+- Spoken responses MUST be concise: 1 to 3 short sentences, then ask exactly ONE engaging question to keep the learner talking.
+- Never write long essays during conversational turns. The response will be voiced aloud via text-to-speech.
+
+ACTIVE VOCABULARY ACCELERATION:
+- Spot whenever the learner uses simple, overused words (e.g. "good", "bad", "happy", "problem", "very") and proactively suggest a more vivid, powerful word (e.g. "exceptional", "setback", "thrilled", "bottleneck").
+- When introducing a new word, give its brief definition or equivalent in ${language}, and show how natives use it.
 
 TEACHING METHODOLOGY:
 - Understand the learner's intended message first.
 - If they make a grammar or word choice error, gently acknowledge their idea, provide the natural phrase, and move forward seamlessly.
-- Highlight sentence improvements without interrupting the flow of conversation.
-- When introducing a new vocabulary word, use it in context with an immediate example.
 
 END-OF-SESSION LEARNING REPORT:
 - Whenever the user asks for a session review, learning report, or feedback summary, format your response clearly into these exact sections:
   1. 🌟 Communication Strengths (2 specific things the learner did well)
   2. 🔍 Areas for Improvement (key points to focus on next)
   3. ✏️ Common Grammar & Sentence Improvements (original mistake vs natural alternative and why)
-  4. 📚 Words Learned & Key Vocabulary (2-3 words/phrases with clear meanings and examples)
+  4. 📚 Words Learned & Key Vocabulary (3-4 powerful words/phrases introduced, clear meanings in ${language}, and example usage)
   5. 🎯 Recommended Next Practice Activity (a concrete action for their next session)
-- Never fabricate numerical pronunciation accuracy scores because evaluation is transcript-based. Base your feedback strictly on grammar, word choice, fluency, and conversational clarity.
+- Never fabricate numerical pronunciation accuracy scores because evaluation is transcript-based. Base your feedback strictly on grammar, vocabulary, fluency, and conversational clarity.
 
 LEARNING CONTEXT:
 - Track: ${trackInstruction}
@@ -170,8 +181,6 @@ function cleanTextForTTS(text) {
 }
 
 async function chooseMagpieVoice(text, requestedLanguage) {
-  // Check for non-Hindi Indic scripts (Bengali, Gujarati, Gurmukhi, Tamil, Telugu, Kannada, Malayalam, Oriya)
-  // Magpie multilingual supports en-US and hi-IN, but does not support other Indic scripts.
   const nonHindiIndicPattern = /[\u0980-\u0A7F\u0A80-\u0AFF\u0B00-\u0B7F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F]/;
   if (nonHindiIndicPattern.test(text)) {
     return null; // Fall back to browser regional voice
@@ -187,7 +196,7 @@ async function chooseMagpieVoice(text, requestedLanguage) {
     return { language: "hi-IN", voice: hindiVoice };
   }
 
-  // English default voice (English is primary learning medium)
+  // English default voice
   const preferredEnglish = process.env.NVIDIA_MAGPIE_EN_VOICE || "Magpie-Multilingual.EN-US.Aria";
   const englishVoice = voices.includes(preferredEnglish) ? preferredEnglish
     : voices.find(v => /EN-US/i.test(v)) || preferredEnglish;
@@ -197,11 +206,9 @@ async function chooseMagpieVoice(text, requestedLanguage) {
 app.get("/api/health", (_req, res) => {
   res.json({
     ok: true,
-    app: "VocaBuddy NVIDIA Edition",
+    app: "VocaBuddy AI Coach",
     version: "3.2.0",
     nvidiaConfigured: Boolean(NVIDIA_API_KEY && NVIDIA_API_KEY.length > 10),
-    model: NVIDIA_MODEL,
-    tts: "NVIDIA Magpie Multilingual (en-US, hi-IN) + Browser fallback",
     tracks: Array.from(tracks),
     languages: Array.from(languages)
   });
@@ -210,7 +217,7 @@ app.get("/api/health", (_req, res) => {
 app.post("/api/chat", async (req, res) => {
   if (!NVIDIA_API_KEY) {
     return res.status(503).json({
-      error: "NVIDIA_API_KEY is missing. Please add your NVIDIA API key to the .env file and restart the server."
+      error: "Service API key is missing on the server. Please check environment configuration."
     });
   }
 
@@ -252,26 +259,26 @@ app.post("/api/chat", async (req, res) => {
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const message = data?.error?.message || data?.detail || `NVIDIA Nemotron request failed (${response.status}).`;
-      console.error("NVIDIA chat error:", response.status, message);
+      const message = data?.error?.message || data?.detail || `AI chat request failed (${response.status}).`;
+      console.error("Chat error:", response.status, message);
       return res.status(response.status).json({ error: message });
     }
 
     let reply = data?.choices?.[0]?.message?.content;
     if (typeof reply !== "string" || !reply.trim()) {
-      return res.status(502).json({ error: "NVIDIA returned an empty response. Please try again." });
+      return res.status(502).json({ error: "AI returned an empty response. Please try again." });
     }
 
-    return res.json({ reply: reply.trim(), model: NVIDIA_MODEL });
+    return res.json({ reply: reply.trim() });
   } catch (error) {
-    console.error("NVIDIA chat connection error:", error.message);
-    return res.status(502).json({ error: "Could not connect to NVIDIA API. Check your internet connection." });
+    console.error("Chat connection error:", error.message);
+    return res.status(502).json({ error: "Could not connect to AI service. Please check your internet connection." });
   }
 });
 
 app.post("/api/speech", async (req, res) => {
   if (!NVIDIA_API_KEY) {
-    return res.status(503).json({ error: "NVIDIA_API_KEY is missing on server." });
+    return res.status(503).json({ error: "Speech service is not configured on server." });
   }
 
   const rawText = typeof req.body?.text === "string" ? req.body.text.trim().slice(0, 2000) : "";
@@ -303,11 +310,9 @@ app.post("/api/speech", async (req, res) => {
     });
 
     if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      console.warn("Magpie TTS non-200 response:", response.status, detail.slice(0, 300));
       return res.json({
         fallbackToBrowser: true,
-        reason: `Magpie endpoint returned ${response.status}. Falling back to browser speech synthesis.`
+        reason: "Neural voice endpoint unavailable. Falling back to browser speech synthesis."
       });
     }
 
@@ -315,13 +320,12 @@ app.post("/api/speech", async (req, res) => {
     res.setHeader("Content-Type", "audio/wav");
     res.setHeader("Content-Length", String(audio.length));
     res.setHeader("Cache-Control", "no-store");
-    res.setHeader("X-VocaBuddy-Voice", tts.voice);
+    res.setHeader("X-Voice-Engine", "Neural");
     return res.send(audio);
   } catch (error) {
-    console.warn("Magpie TTS fetch error:", error.message);
     return res.json({
       fallbackToBrowser: true,
-      reason: "Could not reach NVIDIA Magpie TTS. Using browser speech synthesis fallback."
+      reason: "Could not reach neural voice service. Using browser speech synthesis."
     });
   }
 });
@@ -329,7 +333,6 @@ app.post("/api/speech", async (req, res) => {
 app.get(/.*/, (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`VocaBuddy NVIDIA Edition (V3.2) running on http://localhost:${PORT}`);
-  console.log(`NVIDIA API Key configured: ${Boolean(NVIDIA_API_KEY)}`);
-  console.log(`Model: ${NVIDIA_MODEL}`);
+  console.log(`VocaBuddy AI Coach (V3.2) running on http://localhost:${PORT}`);
+  console.log(`API Key configured: ${Boolean(NVIDIA_API_KEY)}`);
 });

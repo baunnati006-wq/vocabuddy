@@ -3,26 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>VocaBuddy — NVIDIA AI Voice Coach (V3.2)</title>
+<meta name="theme-color" content="#040711">
+<title>VocaBuddy — AI English Fluency & Vocabulary Coach (V3.2)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #070b16;
-  --panel: rgba(18, 25, 47, 0.72);
-  --panel-solid: #12192f;
-  --panel-border: rgba(99, 122, 175, 0.22);
-  --line: rgba(110, 138, 195, 0.18);
+  --bg: #030611;
+  --bg-gradient: radial-gradient(ellipse 70% 55% at 12% 0%, rgba(124, 58, 237, 0.28) 0%, transparent 65%),
+                 radial-gradient(ellipse 65% 50% at 88% 8%, rgba(6, 182, 212, 0.25) 0%, transparent 60%),
+                 radial-gradient(circle 600px at 50% 95%, rgba(244, 63, 94, 0.14) 0%, transparent 70%);
+  --panel: rgba(10, 15, 30, 0.78);
+  --panel-card: rgba(15, 23, 42, 0.7);
+  --border: rgba(99, 130, 200, 0.25);
+  --border-neon: rgba(6, 182, 212, 0.45);
+  --line: rgba(148, 163, 184, 0.12);
   --ink: #f8fafc;
   --muted: #94a3b8;
   --violet: #8b5cf6;
-  --violet-glow: rgba(139, 92, 246, 0.45);
+  --violet-glow: rgba(139, 92, 246, 0.55);
   --cyan: #06b6d4;
-  --cyan-glow: rgba(6, 182, 212, 0.45);
+  --cyan-glow: rgba(6, 182, 212, 0.6);
   --emerald: #10b981;
-  --emerald-glow: rgba(16, 185, 129, 0.4);
+  --emerald-glow: rgba(16, 185, 129, 0.6);
   --rose: #f43f5e;
   --amber: #f59e0b;
 }
@@ -31,10 +35,8 @@
 body {
   margin: 0;
   background-color: var(--bg);
-  background-image: 
-    radial-gradient(ellipse 65% 50% at 15% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 45% at 85% 10%, rgba(6, 182, 212, 0.18) 0%, transparent 55%),
-    radial-gradient(circle 500px at 50% 90%, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
@@ -45,9 +47,9 @@ button, input, select { font-family: inherit; }
 button { cursor: pointer; border: 0; outline: 0; }
 
 .shell {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 24px 20px 48px;
+  padding: 24px 20px 52px;
 }
 
 /* TOP HEADER */
@@ -56,7 +58,7 @@ button { cursor: pointer; border: 0; outline: 0; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 20px;
+  padding-bottom: 22px;
   border-bottom: 1px solid var(--line);
 }
 .brand {
@@ -65,38 +67,50 @@ button { cursor: pointer; border: 0; outline: 0; }
   gap: 14px;
 }
 .logo-icon {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
   display: grid;
   place-items: center;
-  font-size: 24px;
-  box-shadow: 0 0 24px rgba(6, 182, 212, 0.35);
+  font-size: 26px;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0.6;
 }
 .brand h1 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   margin: 0;
-  letter-spacing: -0.02em;
-  background: linear-gradient(to right, #ffffff, #cbd5e1);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 30%, #38bdf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .brand p {
   font-size: 13px;
   color: var(--muted);
-  margin: 2px 0 0;
+  margin: 1px 0 0;
+  font-weight: 500;
 }
 .badges {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 .badge {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
   border-radius: 30px;
   padding: 6px 14px;
   color: #cbd5e1;
@@ -104,8 +118,13 @@ button { cursor: pointer; border: 0; outline: 0; }
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  backdrop-filter: blur(8px);
+  gap: 7px;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s;
+}
+.badge:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
 }
 .badge-dot {
   width: 8px;
@@ -115,129 +134,191 @@ button { cursor: pointer; border: 0; outline: 0; }
   box-shadow: 0 0 10px var(--emerald);
 }
 
-/* HERO */
+/* HERO SECTION */
 .hero {
-  padding: 28px 0 16px;
+  padding: 30px 0 18px;
 }
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--cyan);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-bottom: 8px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 .hero h2 {
-  font-size: clamp(28px, 4.5vw, 42px);
+  font-size: clamp(30px, 4.8vw, 46px);
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin: 0 0 10px;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  margin: 0 0 12px;
 }
 .hero h2 span {
-  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  background: linear-gradient(135deg, #a78bfa 15%, #22d3ee 85%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .hero p {
-  max-width: 780px;
-  color: var(--muted);
-  font-size: 15px;
+  max-width: 800px;
+  color: #94a3b8;
+  font-size: 15.5px;
   margin: 0;
+  line-height: 1.6;
 }
 
-/* SETTINGS CONTROLS */
+/* FILTER CONTROLS (ALWAYS CLICKABLE & INTERACTIVE) */
 .settings {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 20px 0;
+  gap: 14px;
+  margin: 22px 0 16px;
+  position: relative;
+  z-index: 50;
 }
 .setting {
   background: var(--panel);
-  border: 1px solid var(--panel-border);
-  border-radius: 14px;
-  padding: 10px 14px;
-  backdrop-filter: blur(12px);
-  transition: border-color 0.2s;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 16px;
+  backdrop-filter: blur(16px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
-.setting:focus-within {
+.setting:hover {
   border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+  transform: translateY(-1px);
 }
 .setting label {
-  display: block;
-  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cyan);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  pointer-events: none;
+}
+.setting-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 .setting select {
   width: 100%;
   background: transparent;
-  color: var(--ink);
+  color: #f8fafc;
   border: 0;
   outline: 0;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 24px;
+  position: relative;
+  z-index: 2;
+}
+.select-arrow {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: var(--cyan);
+  font-size: 12px;
+  transition: transform 0.2s;
 }
 .setting option {
-  background: #12192f;
+  background: #0b1120;
   color: #fff;
+  font-size: 14px;
+  padding: 10px;
 }
 
-/* SCENARIO QUICK CHIPS */
+/* SCENARIOS CHIPS */
 .scenarios {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   overflow-x: auto;
-  padding-bottom: 12px;
+  padding: 4px 2px 14px;
   margin-bottom: 18px;
   scrollbar-width: none;
+  position: relative;
+  z-index: 20;
 }
 .scenarios::-webkit-scrollbar { display: none; }
 .chip {
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--panel-border);
-  color: #cbd5e1;
-  padding: 6px 13px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.2s;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border);
+  color: #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  backdrop-filter: blur(12px);
 }
 .chip:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(30, 41, 59, 0.9);
   color: #fff;
   border-color: var(--cyan);
-  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+  transform: translateY(-2px);
+}
+.chip.active {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(6, 182, 212, 0.4));
+  border-color: var(--cyan);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
 }
 
 /* MAIN LAYOUT */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.85fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1.48fr) minmax(310px, 0.85fr);
+  gap: 20px;
   align-items: start;
 }
 .panel {
   background: var(--panel);
-  border: 1px solid var(--panel-border);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
 }
 .main-stage {
-  min-height: 640px;
+  min-height: 660px;
   display: flex;
   flex-direction: column;
 }
 
-/* STAGE HEADER & ORB */
+/* STAGE HEADER & STATUS */
 .stage-head {
   display: flex;
   justify-content: space-between;
@@ -245,214 +326,225 @@ button { cursor: pointer; border: 0; outline: 0; }
   margin-bottom: 16px;
 }
 .stage-head h3 {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: -0.01em;
 }
 .status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--panel-border);
-  font-size: 11.5px;
+  gap: 7px;
+  padding: 5px 14px;
+  border-radius: 30px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  font-size: 12px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
 }
 .dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #64748b;
   transition: all 0.3s;
 }
-.dot.live { background: var(--emerald); box-shadow: 0 0 10px var(--emerald); }
-.dot.thinking { background: var(--violet); box-shadow: 0 0 10px var(--violet); }
-.dot.speaking { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
-.dot.mic { background: var(--rose); box-shadow: 0 0 12px var(--rose); }
+.dot.live { background: var(--emerald); box-shadow: 0 0 12px var(--emerald); }
+.dot.thinking { background: var(--violet); box-shadow: 0 0 12px var(--violet); }
+.dot.speaking { background: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+.dot.mic { background: var(--rose); box-shadow: 0 0 14px var(--rose); }
 
+/* PLASMA CORE (BADASS ORB) */
 .stage-body {
   border-bottom: 1px solid var(--line);
-  padding: 24px 12px 20px;
+  padding: 24px 12px 22px;
   text-align: center;
   position: relative;
 }
-
-/* ORB VISUAL */
 .orb-container {
   position: relative;
-  width: 110px;
-  height: 110px;
+  width: 124px;
+  height: 124px;
   margin: 0 auto 16px;
   display: grid;
   place-items: center;
 }
-.orb-waves {
+.orb-halo {
   position: absolute;
-  inset: -12px;
+  inset: -14px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 1.5px dashed rgba(6, 182, 212, 0.3);
+  animation: rotateHalo 18s linear infinite;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 .orb {
-  width: 100px;
-  height: 100px;
+  width: 104px;
+  height: 104px;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, #ffffff 0%, #a78bfa 35%, #06b6d4 75%, #0f172a 100%);
-  box-shadow: 0 0 35px rgba(139, 92, 246, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.35);
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #8b5cf6 35%, #06b6d4 75%, #030611 100%);
+  box-shadow: 0 0 45px rgba(139, 92, 246, 0.5), inset 0 0 24px rgba(255, 255, 255, 0.45);
   display: grid;
   place-items: center;
-  font-size: 38px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 40px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  position: relative;
+  z-index: 5;
 }
 
-/* ORB STATES */
+/* ORB BADASS DYNAMIC STATES */
 .orb.state-idle {
-  animation: floatIdle 4s ease-in-out infinite;
+  animation: floatIdle 3.8s ease-in-out infinite;
 }
 .orb.state-listening {
-  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #34d399 35%, #06b6d4 75%, #0f172a 100%);
-  box-shadow: 0 0 50px rgba(16, 185, 129, 0.65), inset 0 0 25px rgba(255, 255, 255, 0.5);
-  animation: pulseListening 1.2s infinite;
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #10b981 35%, #06b6d4 75%, #030611 100%);
+  box-shadow: 0 0 65px rgba(16, 185, 129, 0.75), inset 0 0 30px rgba(255, 255, 255, 0.6);
+  animation: pulseListening 1.1s infinite;
 }
 .orb.state-thinking {
-  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #c084fc 35%, #6366f1 75%, #0f172a 100%);
-  box-shadow: 0 0 55px rgba(168, 85, 247, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.4);
-  animation: spinThinking 2s linear infinite;
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #f43f5e 30%, #8b5cf6 75%, #030611 100%);
+  box-shadow: 0 0 65px rgba(244, 63, 94, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.5);
+  animation: spinThinking 1.4s linear infinite;
 }
 .orb.state-speaking {
-  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #38bdf8 30%, #818cf8 70%, #0f172a 100%);
-  box-shadow: 0 0 60px rgba(56, 189, 248, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.5);
-  animation: pulseSpeaking 1.3s ease-in-out infinite alternate;
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #38bdf8 30%, #a855f7 70%, #030611 100%);
+  box-shadow: 0 0 75px rgba(56, 189, 248, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.6);
+  animation: pulseSpeaking 1.2s ease-in-out infinite alternate;
 }
 
 @keyframes floatIdle {
   0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-6px) scale(1.02); }
+  50% { transform: translateY(-7px) scale(1.02); }
 }
 @keyframes pulseListening {
-  0% { transform: scale(0.97); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
-  50% { transform: scale(1.07); box-shadow: 0 0 65px rgba(16, 185, 129, 0.85); }
-  100% { transform: scale(0.97); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+  0% { transform: scale(0.96); box-shadow: 0 0 35px rgba(16, 185, 129, 0.45); }
+  50% { transform: scale(1.08); box-shadow: 0 0 75px rgba(16, 185, 129, 0.95); }
+  100% { transform: scale(0.96); box-shadow: 0 0 35px rgba(16, 185, 129, 0.45); }
 }
 @keyframes spinThinking {
-  0% { transform: rotate(0deg) scale(1.03); filter: hue-rotate(0deg); }
-  100% { transform: rotate(360deg) scale(1.03); filter: hue-rotate(90deg); }
+  0% { transform: rotate(0deg) scale(1.04); }
+  100% { transform: rotate(360deg) scale(1.04); }
 }
 @keyframes pulseSpeaking {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.08); box-shadow: 0 0 70px rgba(6, 182, 212, 0.85); }
+  0% { transform: scale(0.98); }
+  100% { transform: scale(1.09); box-shadow: 0 0 85px rgba(6, 182, 212, 0.9); }
+}
+@keyframes rotateHalo {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .stage-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
   margin: 0 0 6px;
+  letter-spacing: -0.02em;
 }
 .stage-sub {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--muted);
-  max-width: 540px;
+  max-width: 560px;
   margin: 0 auto 16px;
   min-height: 22px;
 }
 .hearing-preview {
   display: inline-block;
   background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.35);
   color: #6ee7b7;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  padding: 5px 14px;
+  border-radius: 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 14px;
   max-width: 90%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  animation: pulseListeningBtn 1.5s infinite alternate;
 }
 
-/* ACTION BUTTONS */
+/* BADASS ACTION BUTTONS */
 .actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
 }
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 11px 18px;
-  border-radius: 12px;
-  font-size: 13.5px;
-  font-weight: 700;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--ink);
-  border: 1px solid var(--panel-border);
+  gap: 9px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+  border: 1px solid var(--border);
+  letter-spacing: 0.01em;
 }
 .btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 .btn:active:not(:disabled) {
   transform: translateY(0);
 }
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
   border: 0;
-  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.45);
 }
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.65);
 }
 
 .btn-mic {
-  background: linear-gradient(135deg, #0d9488, #06b6d4);
-  color: #042526;
+  background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+  color: #031518;
   border: 0;
-  font-weight: 800;
-  box-shadow: 0 4px 18px rgba(6, 182, 212, 0.35);
+  font-weight: 900;
+  box-shadow: 0 4px 22px rgba(6, 182, 212, 0.45);
 }
 .btn-mic:hover:not(:disabled) {
-  background: linear-gradient(135deg, #14b8a6, #22d3ee);
-  box-shadow: 0 6px 24px rgba(6, 182, 212, 0.5);
+  background: linear-gradient(135deg, #14b8a6 0%, #22d3ee 100%);
+  box-shadow: 0 8px 30px rgba(6, 182, 212, 0.7);
 }
 .btn-mic.active-listening {
-  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
   color: #fff;
-  animation: pulseListeningBtn 1s infinite alternate;
+  animation: pulseListeningBtn 0.9s infinite alternate;
 }
 @keyframes pulseListeningBtn {
   0% { transform: scale(1); box-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
-  100% { transform: scale(1.03); box-shadow: 0 0 25px rgba(244, 63, 94, 0.8); }
+  100% { transform: scale(1.04); box-shadow: 0 0 30px rgba(244, 63, 94, 0.9); }
 }
 
 .btn-stop {
   color: #fecdd3;
   border-color: rgba(244, 63, 94, 0.4);
-  background: rgba(244, 63, 94, 0.1);
+  background: rgba(244, 63, 94, 0.12);
 }
 .btn-stop:hover:not(:disabled) {
-  background: rgba(244, 63, 94, 0.2);
-  border-color: rgba(244, 63, 94, 0.6);
+  background: rgba(244, 63, 94, 0.25);
+  border-color: rgba(244, 63, 94, 0.7);
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
 }
 
 /* CHAT TRANSCRIPT */
@@ -460,86 +552,92 @@ button { cursor: pointer; border: 0; outline: 0; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 2px 8px;
-  font-size: 13px;
-  font-weight: 700;
+  padding: 16px 2px 10px;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 .chat-head span {
   color: var(--muted);
-  font-size: 11.5px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
 }
 .chat {
   height: 310px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   padding: 6px 4px 14px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 .chat::-webkit-scrollbar { width: 5px; }
-.chat::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+.chat::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 4px; }
 
 .bubble {
   max-width: 86%;
-  padding: 12px 16px;
-  border-radius: 16px;
-  font-size: 13.5px;
-  line-height: 1.55;
+  padding: 13px 18px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
   position: relative;
   animation: bubbleFadeIn 0.25s ease-out;
 }
 @keyframes bubbleFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .bubble.user {
   align-self: flex-end;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(79, 70, 229, 0.25));
-  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(79, 70, 229, 0.3));
+  border: 1px solid rgba(139, 92, 246, 0.45);
   border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.2);
 }
 .bubble.ai {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--panel-border);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--border);
   border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
 }
 .bubble.note {
   align-self: center;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11.5px;
   background: transparent;
   border: 0;
   text-align: center;
-  padding: 4px 10px;
+  padding: 4px 12px;
 }
 .bubble-tag {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #94a3b8;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 .bubble-tag .replay-bubble-btn {
-  background: transparent;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
   color: var(--cyan);
   font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
 }
 .bubble-tag .replay-bubble-btn:hover {
-  opacity: 1;
+  background: rgba(6, 182, 212, 0.25);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
 }
 
 /* COMPOSER */
@@ -548,116 +646,155 @@ button { cursor: pointer; border: 0; outline: 0; }
   gap: 10px;
   margin-top: auto;
   border-top: 1px solid var(--line);
-  padding-top: 14px;
+  padding-top: 16px;
 }
 .composer input {
   flex: 1;
   min-width: 0;
-  background: rgba(14, 20, 38, 0.85);
-  border: 1px solid var(--panel-border);
-  border-radius: 12px;
-  color: var(--ink);
-  padding: 12px 14px;
-  font-size: 13.5px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: #f8fafc;
+  padding: 13px 16px;
+  font-size: 14px;
   outline: 0;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
 .composer input:focus {
-  border-color: var(--violet);
+  border-color: var(--cyan);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
 }
 
-/* SIDEBAR PANELS */
+/* SIDEBAR: TELEMETRY & VOCAB VAULT */
 .side {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 .side h3 {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0 0 12px;
+  font-size: 15.5px;
+  font-weight: 800;
+  margin: 0 0 14px;
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: -0.01em;
 }
 .statgrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 .stat {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--panel-border);
-  padding: 12px;
-  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border);
+  padding: 13px;
+  border-radius: 16px;
+  transition: border-color 0.2s;
+}
+.stat:hover {
+  border-color: var(--cyan);
 }
 .stat strong {
   display: block;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
   font-family: 'JetBrains Mono', monospace;
   color: var(--cyan);
+  line-height: 1.1;
 }
 .stat span {
   color: var(--muted);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
-.hint {
+
+/* VOCAB VAULT (LIVE WORD BANK) */
+.vocab-vault {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.vocab-card {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  transition: all 0.2s;
+  animation: bubbleFadeIn 0.3s ease-out;
+}
+.vocab-card:hover {
+  border-color: var(--cyan);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.25);
+}
+.vocab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.vocab-word {
+  font-weight: 800;
+  font-size: 13.5px;
+  color: #38bdf8;
+}
+.vocab-audio-btn {
+  background: transparent;
   color: var(--muted);
-  font-size: 12px;
-  margin: 10px 0 0;
-  line-height: 1.45;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 11px;
 }
+.vocab-audio-btn:hover {
+  color: var(--cyan);
+}
+.vocab-meaning {
+  color: #cbd5e1;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .tool-btn {
   width: 100%;
-  margin-top: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 700;
+  margin-top: 9px;
+  padding: 11px 16px;
+  border-radius: 13px;
+  font-size: 13.5px;
+  font-weight: 800;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--panel-border);
+  border: 1px solid var(--border);
   color: var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: all 0.2s;
 }
 .tool-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.1);
   border-color: var(--cyan);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
 }
 .tool-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.list {
-  color: var(--muted);
-  font-size: 12.5px;
-  padding-left: 18px;
-  margin: 0;
-}
-.list li {
-  margin: 8px 0;
-}
-.notice {
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fde68a;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 11.5px;
-  line-height: 1.5;
-}
-
-/* REPORT MODAL */
+/* MODAL */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7, 11, 22, 0.85);
-  backdrop-filter: blur(16px);
+  background: rgba(3, 6, 17, 0.88);
+  backdrop-filter: blur(20px);
   display: grid;
   place-items: center;
   padding: 16px;
@@ -671,16 +808,16 @@ button { cursor: pointer; border: 0; outline: 0; }
   pointer-events: auto;
 }
 .modal-card {
-  background: #0f172a;
-  border: 1px solid var(--panel-border);
-  border-radius: 20px;
+  background: #090e1a;
+  border: 1px solid var(--border);
+  border-radius: 22px;
   max-width: 680px;
   width: 100%;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-  transform: translateY(12px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+  transform: translateY(14px);
   transition: transform 0.25s ease;
 }
 .modal-overlay.open .modal-card {
@@ -690,37 +827,37 @@ button { cursor: pointer; border: 0; outline: 0; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 24px;
+  padding: 20px 26px;
   border-bottom: 1px solid var(--line);
 }
 .modal-head h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .modal-body {
-  padding: 20px 24px;
+  padding: 22px 26px;
   overflow-y: auto;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 14.5px;
+  line-height: 1.65;
 }
 .report-content {
   white-space: pre-wrap;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--panel-border);
-  border-radius: 14px;
-  padding: 16px;
-  margin-top: 10px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 12px;
   color: #e2e8f0;
 }
 .modal-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
-  padding: 16px 24px;
+  padding: 18px 26px;
   border-top: 1px solid var(--line);
 }
 
@@ -733,28 +870,28 @@ button { cursor: pointer; border: 0; outline: 0; }
   flex-direction: column;
   gap: 10px;
   z-index: 1100;
-  max-width: 380px;
+  max-width: 400px;
   width: 90%;
   pointer-events: none;
 }
 .toast {
-  background: #1e293b;
-  border: 1px solid var(--panel-border);
+  background: #0f172a;
+  border: 1px solid var(--border);
   color: #fff;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 13px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
   display: flex;
   align-items: flex-start;
   gap: 10px;
   pointer-events: auto;
   animation: toastIn 0.25s ease-out;
 }
-.toast.error { border-color: var(--rose); background: #2b1117; color: #fecdd3; }
-.toast.success { border-color: var(--emerald); background: #062b1b; color: #a7f3d0; }
+.toast.error { border-color: var(--rose); background: #260c14; color: #fecdd3; }
+.toast.success { border-color: var(--emerald); background: #042417; color: #a7f3d0; }
 @keyframes toastIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -762,7 +899,7 @@ button { cursor: pointer; border: 0; outline: 0; }
   text-align: center;
   color: #64748b;
   font-size: 12px;
-  margin-top: 28px;
+  margin-top: 32px;
   line-height: 1.6;
 }
 
@@ -772,94 +909,106 @@ button { cursor: pointer; border: 0; outline: 0; }
   .main-stage { min-height: 580px; }
 }
 @media (max-width: 560px) {
-  .shell { padding: 16px 12px 35px; }
-  .panel { padding: 16px; }
+  .shell { padding: 16px 14px 40px; }
+  .panel { padding: 18px; }
   .chat { height: 260px; }
   .statgrid { grid-template-columns: 1fr 1fr; }
-  .hero h2 { font-size: 26px; }
-  .orb { width: 85px; height: 85px; font-size: 32px; }
+  .hero h2 { font-size: 28px; }
+  .orb { width: 90px; height: 90px; font-size: 34px; }
 }
 </style>
 </head>
 <body>
 
 <div class="shell">
-  <!-- TOP BRANDING -->
+  <!-- TOP BRANDING (CLEAN & BADASS, NO RAW TECH LEAKS) -->
   <header class="top">
     <div class="brand">
-      <div class="logo-icon">🗣️</div>
+      <div class="logo-icon">⚡</div>
       <div>
         <h1>VocaBuddy</h1>
-        <p>NVIDIA-Powered AI Voice Coach</p>
+        <p>AI Fluency & Vocabulary Master</p>
       </div>
     </div>
     <div class="badges">
-      <div class="badge"><span class="badge-dot" id="headerDot"></span> <span id="headerEngine">NVIDIA Nemotron + Magpie</span></div>
-      <div class="badge">Edition · V3.2</div>
+      <div class="badge"><span class="badge-dot"></span> Neural Voice Active</div>
+      <div class="badge">Edition 3.2</div>
     </div>
   </header>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="eyebrow">Interactive Speaking Practice · Instant Synthetic Speech</div>
-    <h2>Master Spoken English with<br><span>NVIDIA Conversational AI.</span></h2>
-    <p>Practice everyday chit-chat, high-stakes job interviews, and workplace meetings. Speak aloud with your microphone, hear natural synthetic speech from NVIDIA Magpie, and get polite grammar corrections explained in your chosen language.</p>
+    <div class="eyebrow">⚡ High-Impact Speaking Practice · Dynamic Native Voice</div>
+    <h2>Command Spoken English with<br><span>Elite Fluency & Vocabulary.</span></h2>
+    <p>Train your spoken English with an energetic AI coach. Upgrade overused words into sophisticated power vocabulary, master native idioms, and sharpen your professional edge in interviews, meetings, and everyday conversations.</p>
   </section>
 
-  <!-- SETTINGS -->
+  <!-- SETTINGS FILTERS (ALWAYS CLICKABLE & DYNAMIC) -->
   <section class="settings">
-    <div class="setting">
-      <label for="track">Practice Track</label>
-      <select id="track">
-        <option value="both">Everyday + Professional</option>
-        <option value="interview">💼 Job Interview Practice</option>
-        <option value="meeting">🤝 Workplace & Team Meetings</option>
-        <option value="presentation">🎤 Presentations & Pitching</option>
-        <option value="roleplay">🎭 Real-Life Roleplay</option>
-        <option value="grammar_vocab">📚 Grammar & Vocab Booster</option>
-        <option value="everyday">☕ Everyday English</option>
-        <option value="professional">👔 Professional English</option>
-      </select>
+    <div class="setting" id="settingTrack">
+      <label for="track">🎯 Practice Focus</label>
+      <div class="setting-select-wrapper">
+        <select id="track">
+          <option value="power_vocab" selected>🔥 Power Words & Advanced Vocab</option>
+          <option value="idioms_phrases">💎 Native Idioms & Phrasal Verbs</option>
+          <option value="grammar_vocab">⚡ Grammar Polish & Sentence Upgrade</option>
+          <option value="interview">💼 Job Interview Mastery</option>
+          <option value="meeting">🤝 Corporate Meetings & Discussions</option>
+          <option value="presentation">🎤 Presentations & Pitching</option>
+          <option value="roleplay">🎭 Real-World Scenarios</option>
+          <option value="everyday">☕ Everyday Chit-Chat</option>
+          <option value="both">🌐 Everyday + Professional</option>
+        </select>
+        <span class="select-arrow">▼</span>
+      </div>
     </div>
-    <div class="setting">
-      <label for="level">Learner Level</label>
-      <select id="level">
-        <option value="beginner">Beginner (Simple & Patient)</option>
-        <option value="intermediate" selected>Intermediate (Conversational)</option>
-        <option value="advanced">Advanced (Nuanced & Fluent)</option>
-      </select>
+
+    <div class="setting" id="settingLevel">
+      <label for="level">📈 Fluency Level</label>
+      <div class="setting-select-wrapper">
+        <select id="level">
+          <option value="beginner">Beginner (Approachable & Clear)</option>
+          <option value="intermediate" selected>Intermediate (Conversational)</option>
+          <option value="advanced">Advanced (Executive Polish)</option>
+        </select>
+        <span class="select-arrow">▼</span>
+      </div>
     </div>
-    <div class="setting">
-      <label for="language">Explanations In</label>
-      <select id="language">
-        <option value="Hindi" selected>Hindi (हिन्दी)</option>
-        <option value="English">English</option>
-        <option value="Gujarati">Gujarati (ગુજરાતી)</option>
-        <option value="Marathi">Marathi (मराठी)</option>
-        <option value="Bengali">Bengali (বাংলা)</option>
-        <option value="Tamil">Tamil (தமிழ்)</option>
-        <option value="Telugu">Telugu (తెలుగు)</option>
-        <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
-        <option value="Malayalam">Malayalam (മലയാളം)</option>
-        <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
-      </select>
+
+    <div class="setting" id="settingLanguage">
+      <label for="language">🌐 Explanations In</label>
+      <div class="setting-select-wrapper">
+        <select id="language">
+          <option value="Hindi" selected>Hindi (हिन्दी)</option>
+          <option value="English">English</option>
+          <option value="Gujarati">Gujarati (ગુજરાતી)</option>
+          <option value="Marathi">Marathi (मराठी)</option>
+          <option value="Bengali">Bengali (বাংলা)</option>
+          <option value="Tamil">Tamil (தமிழ்)</option>
+          <option value="Telugu">Telugu (తెలుగు)</option>
+          <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
+          <option value="Malayalam">Malayalam (മലയാളം)</option>
+          <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
+        </select>
+        <span class="select-arrow">▼</span>
+      </div>
     </div>
   </section>
 
-  <!-- QUICK PRACTICE SCENARIOS -->
+  <!-- QUICK VOCABULARY & PRACTICE CHIPS -->
   <div class="scenarios" id="scenarioChips">
-    <button class="chip" data-track="interview" data-prompt="Hi! Let's start a mock job interview. Ask me the first question.">💼 Job Interview</button>
-    <button class="chip" data-track="meeting" data-prompt="Let's practice a team meeting. Give me an update to respond to.">🤝 Team Meeting</button>
-    <button class="chip" data-track="presentation" data-prompt="I need to practice giving a presentation hook. How do I start?">🎤 Presentation Hook</button>
-    <button class="chip" data-track="everyday" data-prompt="Let's have a casual conversation about favorite hobbies and travel.">☕ Casual Chit-Chat</button>
-    <button class="chip" data-track="roleplay" data-prompt="Let's roleplay: you are a hotel receptionist and I am checking in.">🏨 Hotel Check-In</button>
-    <button class="chip" data-track="roleplay" data-prompt="Let's roleplay: you are a client and I am pitching our software services.">💻 Client Pitch</button>
-    <button class="chip" data-track="grammar_vocab" data-prompt="Can you teach me 3 powerful workplace phrases with examples?">📚 Vocab Boost</button>
+    <button class="chip active" data-track="power_vocab" data-prompt="Teach me 2 powerful, smart English words to replace basic words in conversations.">🔥 Power Words Drill</button>
+    <button class="chip" data-track="idioms_phrases" data-prompt="Give me a common native English idiom used in daily conversations, with an example.">💎 Daily Idiom</button>
+    <button class="chip" data-track="power_vocab" data-prompt="I want to elevate my sentence. If I say 'I am very tired from work', what are 3 better ways to say it?">⚡ Upgrade My Sentence</button>
+    <button class="chip" data-track="interview" data-prompt="Let's practice a job interview question. Ask me the first question and evaluate my vocabulary.">💼 Mock Interview</button>
+    <button class="chip" data-track="meeting" data-prompt="Let's simulate a corporate workplace meeting. Ask for my project status.">🤝 Workplace Meeting</button>
+    <button class="chip" data-track="presentation" data-prompt="How do I deliver a strong, captivating presentation hook? Coach me.">🎤 Presentation Hook</button>
+    <button class="chip" data-track="everyday" data-prompt="Let's have a casual conversation about weekend plans and favorite movies.">☕ Casual Small Talk</button>
   </div>
 
-  <!-- MAIN INTERACTIVE LAYOUT -->
+  <!-- MAIN INTERACTIVE STUDIO -->
   <main class="layout">
-    <!-- CONVERSATION ROOM -->
+    <!-- CONVERSATION ARENA -->
     <section class="panel main-stage">
       <div class="stage-head">
         <h3><span>🎙️</span> Practice Studio</h3>
@@ -869,84 +1018,88 @@ button { cursor: pointer; border: 0; outline: 0; }
         </div>
       </div>
 
-      <!-- ANIMATED ORB STAGE -->
+      <!-- BADASS PLASMA CORE STAGE -->
       <div class="stage-body">
         <div class="orb-container">
-          <div class="orb-waves" id="orbWaves"></div>
+          <div class="orb-halo"></div>
           <div class="orb state-idle" id="orb">✦</div>
         </div>
-        <h2 class="stage-title" id="stageTitle">Ready to Practice?</h2>
-        <div class="stage-sub" id="stageSub">Tap "Start Session", speak naturally in English, and VocaBuddy will coach you.</div>
+        <h2 class="stage-title" id="stageTitle">Ready to Elevate Your English?</h2>
+        <div class="stage-sub" id="stageSub">Tap "Start Practice", speak or type, and VocaBuddy will coach you.</div>
         <div id="hearingBox" style="display:none;" class="hearing-preview">Hearing: <span id="hearingText"></span></div>
 
         <div class="actions">
-          <button class="btn btn-primary" id="startBtn">🚀 Start Session</button>
+          <button class="btn btn-primary" id="startBtn">⚡ Start Practice</button>
           <button class="btn btn-mic" id="talkBtn" disabled>🎙️ Speak</button>
-          <button class="btn" id="replayBtn" disabled title="Replay VocaBuddy's last spoken response">🔄 Replay Voice</button>
-          <button class="btn btn-stop" id="stopVoiceBtn" disabled title="Stop AI audio playback">⏹️ Stop Audio</button>
+          <button class="btn" id="replayBtn" disabled title="Replay VocaBuddy's last response">🔄 Replay</button>
+          <button class="btn btn-stop" id="stopVoiceBtn" disabled title="Interrupt or stop audio immediately">⏹️ Interrupt Audio</button>
           <button class="btn btn-stop" id="endBtn" disabled>End Session</button>
         </div>
       </div>
 
-      <!-- TRANSCRIPT CHAT -->
+      <!-- LIVE TRANSCRIPT CHAT -->
       <div class="chat-head">
         <b>Live Transcript</b>
         <span id="entryCount">0 messages</span>
       </div>
       <div class="chat" id="chat">
-        <div class="bubble note">Your conversation transcript will appear here. Tap Start Session to begin!</div>
+        <div class="bubble note">Your practice conversation transcript will appear here. Tap Start Practice to begin!</div>
       </div>
 
-      <!-- TEXT COMPOSER FALLBACK -->
+      <!-- TEXT COMPOSER -->
       <form class="composer" id="form">
-        <input id="messageInput" placeholder="Type your response here or speak using the mic…" autocomplete="off" maxlength="3000" disabled>
+        <input id="messageInput" placeholder="Type your answer here or tap Speak to use your mic…" autocomplete="off" maxlength="3000" disabled>
         <button class="btn btn-primary" id="sendBtn" disabled>Send</button>
       </form>
     </section>
 
-    <!-- SIDEBAR STATS & TOOLS -->
+    <!-- SIDEBAR: VOCAB VAULT & TELEMETRY -->
     <aside class="side">
+      <!-- PRACTICE METRICS -->
       <section class="panel">
-        <h3><span>⏱️</span> Practice Snapshot</h3>
+        <h3><span>📊</span> Practice Telemetry</h3>
         <div class="statgrid">
           <div class="stat">
             <strong id="timer">00:00</strong>
-            <span>Session Time</span>
+            <span>Session Duration</span>
           </div>
           <div class="stat">
             <strong id="turns">0</strong>
             <span>Your Turns</span>
           </div>
         </div>
-        <p class="hint" id="snapshot">Start a session to monitor speaking duration and conversation turns.</p>
       </section>
 
+      <!-- LIVE VOCAB VAULT -->
       <section class="panel">
-        <h3><span>🎯</span> Learning Tools</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0;"><span>💎</span> Vocab Vault</h3>
+          <span style="font-size: 11px; font-weight: 700; color: var(--cyan);" id="vaultCount">0 words captured</span>
+        </div>
+        <div class="vocab-vault" id="vocabVault">
+          <div class="vocab-card" id="vaultEmpty">
+            <div class="vocab-header"><span class="vocab-word">Expand Your Vocabulary</span></div>
+            <div class="vocab-meaning">Start practicing to automatically capture power words and idioms here!</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLS -->
+      <section class="panel">
+        <h3><span>🛠️</span> Session Tools</h3>
         <button class="tool-btn" id="reviewBtn" disabled>✨ End Session & Report</button>
         <button class="tool-btn" id="copyBtn" disabled>📋 Copy Full Transcript</button>
         <button class="tool-btn" id="downloadTranscriptBtn" disabled>💾 Export Transcript (.txt)</button>
-        <p class="hint">Ask for mock interviews, grammar checks, or vocabulary tips at any time.</p>
       </section>
 
-      <section class="panel">
-        <h3><span>⚡</span> NVIDIA Architecture</h3>
-        <ul class="list">
-          <li><b>Nemotron 3.5 Lightning:</b> Reasoning & conversational coaching engine.</li>
-          <li><b>Magpie Multilingual TTS:</b> High-fidelity natural voice output.</li>
-          <li><b>Multilingual Guidance:</b> English practice with native explanations.</li>
-          <li><b>Turn-Based Audio:</b> Full speaker interruption with instant stop.</li>
-        </ul>
-      </section>
-
-      <div class="notice">
-        <b>Privacy Notice:</b> Voice input is transcribed via your browser's speech recognition engine. AI coaching is powered by NVIDIA NIM endpoints. Do not share confidential or sensitive credentials.
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; font-size: 12px; color: var(--muted); line-height: 1.5;">
+        💡 <b>Pro-Tip:</b> You can switch your practice track, level, or explanation language at any moment. The coach adapts instantly.
       </div>
     </aside>
   </main>
 
   <footer class="footer">
-    VocaBuddy NVIDIA AI Voice Coach (V3.2) · Turn-Based English Practice · Powered by NVIDIA Nemotron & Magpie Multilingual
+    VocaBuddy AI Coach (V3.2) · Turn-Based English Speaking & Vocabulary Accelerator
   </footer>
 </div>
 
@@ -959,7 +1112,7 @@ button { cursor: pointer; border: 0; outline: 0; }
     </div>
     <div class="modal-body">
       <p style="color: var(--muted); margin-top: 0;">Here is a comprehensive summary of your speaking session:</p>
-      <div class="report-content" id="reportText">Generating your learning report...</div>
+      <div class="report-content" id="reportText">Compiling your personalized learning report...</div>
     </div>
     <div class="modal-actions">
       <button class="btn" id="copyReportBtn">📋 Copy Report</button>
@@ -969,7 +1122,7 @@ button { cursor: pointer; border: 0; outline: 0; }
   </div>
 </div>
 
-<!-- TOAST CONTAINER -->
+<!-- TOAST NOTIFICATIONS -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -985,6 +1138,7 @@ let lastSpokenText = "";
 let sessionStartTime = 0;
 let clockInterval = null;
 let turnsCount = 0;
+let capturedVocab = new Set();
 
 const getPrefs = () => ({
   language: $("language").value,
@@ -996,13 +1150,13 @@ function showToast(message, type = "info") {
   const container = $("toastContainer");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
-  toast.innerHTML = `<span>${type === "error" ? "⚠️" : type === "success" ? "✅" : "ℹ️"}</span><div>${message}</div>`;
+  toast.innerHTML = `<span>${type === "error" ? "⚠️" : type === "success" ? "✅" : "⚡"}</span><div>${message}</div>`;
   container.appendChild(toast);
   setTimeout(() => {
     toast.style.opacity = "0";
-    toast.style.transform = "translateY(10px)";
+    toast.style.transform = "translateY(12px)";
     setTimeout(() => toast.remove(), 300);
-  }, 4500);
+  }, 4000);
 }
 
 function setOrbState(state) {
@@ -1054,6 +1208,58 @@ function addBubble(role, text) {
   div.append(tag, body);
   $("chat").appendChild(div);
   scrollChat();
+
+  if (role === "assistant") {
+    extractAndAddVocab(text);
+  }
+}
+
+// VOCABULARY EXTRACTION FOR VOCAB VAULT
+function extractAndAddVocab(text) {
+  // Extract words emphasized in quotes or bold markdown
+  const boldMatches = text.match(/\*\*([A-Za-z\s-]{3,24})\*\*/g);
+  if (boldMatches) {
+    boldMatches.forEach(raw => {
+      const word = raw.replace(/\*/g, "").trim();
+      if (word.length > 2 && !capturedVocab.has(word.toLowerCase())) {
+        capturedVocab.add(word.toLowerCase());
+        addVocabCard(word, text);
+      }
+    });
+  }
+}
+
+function addVocabCard(word, context) {
+  const vault = $("vocabVault");
+  const empty = $("vaultEmpty");
+  if (empty) empty.remove();
+
+  const card = document.createElement("div");
+  card.className = "vocab-card";
+
+  // Quick definition extraction or snippet
+  let snippet = `Introduced in conversation context.`;
+  const sentences = context.split(/(?<=[.?!])\s+/);
+  const relevantSentence = sentences.find(s => s.toLowerCase().includes(word.toLowerCase()));
+  if (relevantSentence) {
+    snippet = relevantSentence.replace(/\*\*/g, "").trim();
+  }
+
+  card.innerHTML = `
+    <div class="vocab-header">
+      <span class="vocab-word">⚡ ${word}</span>
+      <button class="vocab-audio-btn" title="Pronounce">🔊</button>
+    </div>
+    <div class="vocab-meaning">${snippet}</div>
+  `;
+
+  card.querySelector(".vocab-audio-btn").onclick = (e) => {
+    e.stopPropagation();
+    playVoice(word);
+  };
+
+  vault.prepend(card);
+  $("vaultCount").textContent = `${capturedVocab.size} words captured`;
 }
 
 function scrollChat() {
@@ -1099,23 +1305,16 @@ function stopVoice() {
   }
   $("stopVoiceBtn").disabled = true;
   if (running && !listening) {
-    setStage("Your turn", "Tap Speak or type a response. Feel free to interrupt whenever you want.", "Listening ready", "idle");
+    setStage("Your turn", "Tap Speak or type your answer. Interrupt anytime.", "Listening ready", "idle");
   }
 }
 
 // BROWSER TTS FALLBACK
 function fallbackSpeak(text) {
   const langMap = {
-    English: "en-IN",
-    Hindi: "hi-IN",
-    Gujarati: "gu-IN",
-    Marathi: "mr-IN",
-    Bengali: "bn-IN",
-    Tamil: "ta-IN",
-    Telugu: "te-IN",
-    Kannada: "kn-IN",
-    Malayalam: "ml-IN",
-    Punjabi: "pa-IN"
+    English: "en-IN", Hindi: "hi-IN", Gujarati: "gu-IN", Marathi: "mr-IN",
+    Bengali: "bn-IN", Tamil: "ta-IN", Telugu: "te-IN", Kannada: "kn-IN",
+    Malayalam: "ml-IN", Punjabi: "pa-IN"
   };
   const locale = langMap[getPrefs().language] || "en-IN";
 
@@ -1127,7 +1326,7 @@ function fallbackSpeak(text) {
     utterance.onstart = () => {
       $("stopVoiceBtn").disabled = false;
       $("replayBtn").disabled = false;
-      setStage("VocaBuddy speaking", "Listening to browser voice fallback...", "Speaking (Browser)", "speaking");
+      setStage("VocaBuddy speaking", "Listening to voice output...", "Speaking", "speaking");
     };
     utterance.onend = () => {
       $("stopVoiceBtn").disabled = true;
@@ -1135,16 +1334,16 @@ function fallbackSpeak(text) {
     };
     utterance.onerror = () => {
       $("stopVoiceBtn").disabled = true;
-      if (running) setStage("Your turn", "Audio playback finished.", "Ready", "idle");
+      if (running) setStage("Your turn", "Playback finished.", "Ready", "idle");
     };
     speechSynthesis.speak(utterance);
   } else {
     $("stopVoiceBtn").disabled = true;
-    setStage("Your turn", "Audio playback unavailable. Continue by speaking or typing.", "Ready", "idle");
+    setStage("Your turn", "Audio playback finished. Continue by speaking or typing.", "Ready", "idle");
   }
 }
 
-// PLAY SYNTHETIC VOICE (NVIDIA MAGPIE)
+// PLAY SYNTHETIC VOICE
 async function playVoice(text) {
   if (!text) return;
   stopVoice();
@@ -1166,7 +1365,7 @@ async function playVoice(text) {
         fallbackSpeak(text);
         return;
       }
-      throw new Error(data.error || "NVIDIA speech generation failed.");
+      throw new Error(data.error || "Speech synthesis failed.");
     }
 
     if (!response.ok) {
@@ -1190,15 +1389,14 @@ async function playVoice(text) {
     };
 
     await currentAudio.play();
-    const voiceUsed = response.headers.get("X-VocaBuddy-Voice") || "Magpie Multilingual";
-    setStage("VocaBuddy is speaking", `Playing audio via NVIDIA Magpie (${voiceUsed}). You can tap Stop to interrupt.`, "Speaking (NVIDIA Magpie)", "speaking");
+    setStage("VocaBuddy is speaking", "Speaking. You can tap 'Interrupt Audio' to stop anytime.", "Speaking", "speaking");
   } catch (error) {
-    console.warn("Magpie audio error:", error.message);
+    console.warn("Audio error:", error.message);
     fallbackSpeak(text);
   }
 }
 
-// SEND MESSAGE TO TUTOR
+// ASK TUTOR
 async function askTutor(text, isReport = false) {
   if (!running || !text.trim()) return;
   const clean = text.trim();
@@ -1208,14 +1406,12 @@ async function askTutor(text, isReport = false) {
     history.push({ role: "user", content: clean });
     turnsCount++;
     $("turns").textContent = turnsCount;
-    $("snapshot").textContent = `Conversation active. You've completed ${turnsCount} speaking turns.`;
   }
 
-  // Allow interrupting/stopping while thinking or speaking
   $("talkBtn").disabled = true;
   $("sendBtn").disabled = true;
   $("messageInput").disabled = true;
-  setStage(isReport ? "Compiling Report…" : "Thinking…", "VocaBuddy is preparing a response with NVIDIA Nemotron.", "NVIDIA Nemotron", "thinking");
+  setStage(isReport ? "Compiling Report…" : "Thinking…", "VocaBuddy is analyzing your sentence and preparing feedback.", "Thinking…", "thinking");
 
   try {
     const response = await fetch("/api/chat", {
@@ -1230,7 +1426,7 @@ async function askTutor(text, isReport = false) {
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(data.error || "NVIDIA chat request failed.");
+      throw new Error(data.error || "Request failed.");
     }
 
     const reply = data.reply;
@@ -1238,18 +1434,18 @@ async function askTutor(text, isReport = false) {
 
     if (isReport) {
       openReportModal(reply);
-      addBubble("assistant", "🌟 I have compiled your English Practice Report! You can review the strengths, improvements, and practice goals in the report window.");
-      setStage("Session Report Ready", "Review your personalized feedback and recommendations.", "Report Complete", "idle");
+      addBubble("assistant", "🌟 I have compiled your English & Vocabulary Report! Review your strengths, new words learned, and next practice goal in the report window.");
+      setStage("Report Ready", "Review your personalized feedback and vocabulary goals.", "Report Complete", "idle");
       playVoice("Here is your English practice report with your strengths and key areas for improvement. You can review all details on screen!");
     } else {
       addBubble("assistant", reply);
-      setStage("VocaBuddy replied", "Generating natural speech with NVIDIA Magpie…", "NVIDIA Magpie", "speaking");
+      setStage("VocaBuddy replied", "Playing spoken response…", "Speaking", "speaking");
       await playVoice(reply);
     }
   } catch (error) {
     showToast(error.message, "error");
     addNote("Error: " + error.message);
-    setStage("Something went wrong", "Check your internet connection and NVIDIA API settings.", "Error", "idle");
+    setStage("Something went wrong", "Check your internet connection and try again.", "Error", "idle");
   } finally {
     if (running) {
       $("talkBtn").disabled = false;
@@ -1260,22 +1456,19 @@ async function askTutor(text, isReport = false) {
   }
 }
 
-// MICROPHONE & SPEECH RECOGNITION
+// MICROPHONE SPEECH RECOGNITION
 function startListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    showToast("Speech recognition is not supported in this browser. Please use Google Chrome or type your answer.", "error");
-    addNote("Speech recognition unsupported. You can type in the box below.");
+    showToast("Speech recognition is not supported in this browser. Please use Chrome or type your answer.", "error");
+    addNote("Microphone unsupported in this browser. Use the text box below.");
     return;
   }
 
   if (!running) return;
 
-  // If already listening, stop listening and submit what was heard
   if (listening) {
-    if (recognition) {
-      recognition.stop();
-    }
+    if (recognition) recognition.stop();
     return;
   }
 
@@ -1297,7 +1490,7 @@ function startListening() {
   $("talkBtn").classList.add("active-listening");
   $("hearingBox").style.display = "inline-block";
   $("hearingText").textContent = "Listening...";
-  setStage("Listening to you…", "Speak clearly in English. Tap 'Stop Speaking' when done.", "Microphone active", "listening");
+  setStage("Listening to you…", "Speak clearly in English. Tap 'Stop Speaking' when done.", "Listening", "listening");
 
   let recordedFinal = "";
 
@@ -1316,11 +1509,10 @@ function startListening() {
   };
 
   recognition.onerror = event => {
-    console.warn("Speech recognition error:", event.error);
     if (event.error === "not-allowed" || event.error === "service-not-allowed") {
       showToast("Microphone access blocked. Click the lock icon in your browser address bar to allow microphone.", "error");
     } else if (event.error !== "no-speech") {
-      showToast("Speech recognition error: " + event.error, "error");
+      showToast("Speech recognition note: " + event.error, "info");
     }
   };
 
@@ -1345,24 +1537,12 @@ function startListening() {
     $("talkBtn").textContent = "🎙️ Speak";
     $("talkBtn").classList.remove("active-listening");
     $("hearingBox").style.display = "none";
-    showToast("Could not start microphone. Check browser permissions.", "error");
+    showToast("Could not start microphone. Check permissions.", "error");
   }
 }
 
 // SESSION MANAGEMENT
 async function startSession() {
-  try {
-    const health = await fetch("/api/health").then(r => r.json());
-    if (!health.nvidiaConfigured) {
-      showToast("NVIDIA_API_KEY is not configured in .env on the server.", "error");
-      addNote("Please configure NVIDIA_API_KEY in the server .env file.");
-      return;
-    }
-  } catch (err) {
-    showToast("Server connection failed. Is the server running?", "error");
-    return;
-  }
-
   history = [];
   turnsCount = 0;
   running = true;
@@ -1371,26 +1551,28 @@ async function startSession() {
   $("chat").innerHTML = "";
   enableControls(true);
   $("startBtn").disabled = true;
-  $("startBtn").textContent = "Session Active";
-  $("track").disabled = $("level").disabled = $("language").disabled = true;
+  $("startBtn").textContent = "⚡ Session Active";
+
+  // DO NOT DISABLE FILTERS! KEEP THEM FULLY INTERACTIVE & CLICKABLE!
+  $("track").disabled = false;
+  $("level").disabled = false;
+  $("language").disabled = false;
 
   if (clockInterval) clearInterval(clockInterval);
   clockInterval = setInterval(updateClock, 1000);
 
-  addNote("Session started · NVIDIA Nemotron 3.5 + Magpie Multilingual");
+  addNote("Practice session started · Live Vocab Vault Active");
 
   const selectedTrack = $("track").value;
-  let starterPrompt = "Start the English practice session. Greet me warmly and naturally in one short sentence. Introduce yourself as my English coach and ask one simple opening question.";
-  if (selectedTrack === "interview") {
-    starterPrompt = "Start a job interview practice session. Greet me warmly as the interviewer, state the role, and ask the first classic interview question.";
+  let starterPrompt = "Start our English coaching session. Greet me warmly and ask one engaging question.";
+  if (selectedTrack === "power_vocab") {
+    starterPrompt = "Welcome me to our Power Vocabulary practice. Introduce yourself and ask me to describe how my day is going so we can upgrade my words!";
+  } else if (selectedTrack === "idioms_phrases") {
+    starterPrompt = "Welcome me to our Native Idioms practice. Introduce yourself and share one cool everyday idiom!";
+  } else if (selectedTrack === "interview") {
+    starterPrompt = "Start a job interview practice session. Greet me as the hiring manager and ask the first classic question.";
   } else if (selectedTrack === "meeting") {
-    starterPrompt = "Start a business meeting practice session. Set the quick meeting context and ask for my status update.";
-  } else if (selectedTrack === "presentation") {
-    starterPrompt = "Start a presentation coaching session. Ask me what topic I want to pitch or present today.";
-  } else if (selectedTrack === "roleplay") {
-    starterPrompt = "Start a real-life English role-play scenario. Set the stage briefly and ask your opening question in character.";
-  } else if (selectedTrack === "grammar_vocab") {
-    starterPrompt = "Start a grammar and vocabulary booster session. Welcome me warmly and ask me what sentence or topic we should work on.";
+    starterPrompt = "Start a corporate meeting simulation. Greet me and ask for my project update.";
   }
 
   await askTutor(starterPrompt);
@@ -1410,27 +1592,34 @@ function endSession() {
 
   enableControls(false);
   $("startBtn").disabled = false;
-  $("startBtn").textContent = "🚀 Start Session";
-  $("track").disabled = $("level").disabled = $("language").disabled = false;
+  $("startBtn").textContent = "⚡ Start Practice";
 
   setStage("Session Ended", "You completed your practice session. Review your transcript or start a new session.", "Ready", "idle");
   addNote("Session ended.");
-  $("snapshot").textContent = `Session finished! You completed ${turnsCount} speaking turns in ${$("timer").textContent}.`;
 }
 
-// REPORT MODAL LOGIC
+// DYNAMIC FILTER CHANGE LISTENERS (UPDATE PREFERENCES MID-SESSION)
+$("track").onchange = () => {
+  showToast(`Practice focus updated: ${$("track").options[$("track").selectedIndex].text}`, "success");
+};
+$("level").onchange = () => {
+  showToast(`Fluency level updated: ${$("level").options[$("level").selectedIndex].text}`, "success");
+};
+$("language").onchange = () => {
+  showToast(`Explanation language updated: ${$("language").value}`, "success");
+};
+
+// REPORT MODAL
 function openReportModal(reportContent) {
   $("reportText").textContent = reportContent;
   $("reportModal").classList.add("open");
 }
-
 function closeReportModal() {
   $("reportModal").classList.remove("open");
 }
-
 function requestReport() {
   if (!running) {
-    showToast("Please start a session first before generating a report.", "info");
+    showToast("Please start a practice session first.", "info");
     return;
   }
   askTutor("Please review my English from this entire session and provide a comprehensive learning report with: 1. Communication Strengths, 2. Areas for Improvement, 3. Common Grammar Mistakes and Natural Alternatives, 4. Words Learned and Key Vocabulary, 5. Recommended Next Practice Activity.", true);
@@ -1459,10 +1648,14 @@ $("form").onsubmit = e => {
 
 $("reviewBtn").onclick = requestReport;
 
-// SCENARIO CHIPS CLICK
+// SCENARIOS CHIPS INTERACTION (ALWAYS CLICKABLE)
 $("scenarioChips").onclick = e => {
   const chip = e.target.closest(".chip");
   if (!chip) return;
+
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  chip.classList.add("active");
+
   const track = chip.dataset.track;
   const prompt = chip.dataset.prompt;
 
@@ -1470,14 +1663,14 @@ $("scenarioChips").onclick = e => {
 
   if (!running) {
     startSession().then(() => {
-      setTimeout(() => askTutor(prompt), 1000);
+      setTimeout(() => askTutor(prompt), 900);
     });
   } else {
     askTutor(prompt);
   }
 };
 
-// TRANSCRIPT COPY & EXPORT
+// TRANSCRIPT EXPORT
 $("copyBtn").onclick = async () => {
   if (history.length === 0) return;
   const text = history.map(x => (x.role === "user" ? "You: " : "VocaBuddy: ") + x.content).join("\n\n");
@@ -1518,17 +1711,16 @@ $("copyReportBtn").onclick = async () => {
   }
 };
 $("downloadReportBtn").onclick = () => {
-  const text = `VOCABUDDY ENGLISH PRACTICE REPORT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\n\n${$("reportText").textContent}`;
+  const text = `VOCABUDDY ENGLISH & VOCABULARY REPORT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\n\n${$("reportText").textContent}`;
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `VocaBuddy-Learning-Report-${Date.now()}.txt`;
+  a.download = `VocaBuddy-Report-${Date.now()}.txt`;
   a.click();
   URL.revokeObjectURL(a.href);
   showToast("Report downloaded!", "success");
 };
 
-// CLEANUP ON UNLOAD
 window.addEventListener("beforeunload", () => {
   if (recognition) recognition.abort();
   stopVoice();
@@ -1540,12 +1732,11 @@ fetch("/api/health")
   .then(r => r.json())
   .then(info => {
     if (!info.nvidiaConfigured) {
-      setStage("API Key Needed", "Add NVIDIA_API_KEY to server .env file before starting.", "Not Configured", "idle");
-      showToast("NVIDIA API Key is missing. Please add it to your server .env file.", "error");
+      setStage("Setup Needed", "Configure API key in server environment before starting.", "Config Needed", "idle");
     }
   })
   .catch(() => {
-    setStage("Server Offline", "Cannot connect to backend server on localhost.", "Offline", "idle");
+    setStage("Server Offline", "Cannot connect to backend server.", "Offline", "idle");
   });
 </script>
 </body>
