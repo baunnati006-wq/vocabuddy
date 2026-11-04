@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -711,6 +711,173 @@ button { cursor: pointer; border: 0; outline: 0; }
   letter-spacing: 0.06em;
 }
 
+/* WORD OF THE DAY */
+.wotd-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(6, 182, 212, 0.14));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 18px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+.wotd-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), transparent);
+}
+.wotd-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.wotd-word {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wotd-word button {
+  background: rgba(6, 182, 212, 0.14);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  color: var(--cyan);
+  font-size: 13px;
+  padding: 3px 9px;
+  border-radius: 7px;
+  transition: all 0.2s;
+}
+.wotd-word button:hover { background: rgba(6, 182, 212, 0.3); box-shadow: 0 0 10px rgba(6,182,212,0.4); }
+.wotd-meaning {
+  color: #94a3b8;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.wotd-loading {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-style: italic;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+}
+
+/* STREAK TRACKER */
+.streak-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 13px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fcd34d;
+}
+.streak-flame {
+  font-size: 20px;
+  line-height: 1;
+}
+.streak-info {
+  flex: 1;
+}
+.streak-count {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.1;
+  color: var(--amber);
+}
+.streak-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* SPEED CONTROL */
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 2px;
+}
+.speed-control label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  min-width: 70px;
+}
+.speed-control input[type=range] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(99,130,200,0.25);
+  outline: none;
+  cursor: pointer;
+}
+.speed-control input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(6,182,212,0.6);
+  cursor: pointer;
+}
+.speed-val {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cyan);
+  min-width: 32px;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* CHAR COUNTER */
+.composer-wrap {
+  position: relative;
+}
+.char-counter {
+  position: absolute;
+  bottom: -18px;
+  right: 4px;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 600;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+.char-counter.warn { color: var(--amber); }
+.char-counter.danger { color: var(--rose); }
+
+/* POWER WORD HIGHLIGHT IN BUBBLES */
+.power-word {
+  color: var(--cyan);
+  font-weight: 800;
+  border-bottom: 1.5px solid rgba(6,182,212,0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0 1px;
+}
+.power-word:hover {
+  color: #fff;
+  border-color: var(--cyan);
+  text-shadow: 0 0 10px rgba(6,182,212,0.7);
+}
+
 /* VOCAB VAULT (LIVE WORD BANK) */
 .vocab-vault {
   display: flex;
@@ -1048,16 +1215,34 @@ button { cursor: pointer; border: 0; outline: 0; }
 
       <!-- TEXT COMPOSER -->
       <form class="composer" id="form">
-        <input id="messageInput" placeholder="Type your answer here or tap Speak to use your mic…" autocomplete="off" maxlength="3000" disabled>
+        <div class="composer-wrap" style="flex:1; min-width:0;">
+          <input id="messageInput" placeholder="Type your answer here or tap Speak to use your mic…" autocomplete="off" maxlength="3000" disabled>
+          <span class="char-counter" id="charCounter">0 / 3000</span>
+        </div>
         <button class="btn btn-primary" id="sendBtn" disabled>Send</button>
       </form>
     </section>
 
     <!-- SIDEBAR: VOCAB VAULT & TELEMETRY -->
     <aside class="side">
-      <!-- PRACTICE METRICS -->
+
+      <!-- WORD OF THE DAY -->
+      <section class="panel">
+        <div class="wotd-label">✨ Word of the Day</div>
+        <div id="wotdContent" class="wotd-loading">Loading today's power word…</div>
+      </section>
+
+      <!-- STREAK & PRACTICE METRICS -->
       <section class="panel">
         <h3><span>📊</span> Practice Telemetry</h3>
+        <!-- DAILY STREAK -->
+        <div class="streak-row" style="margin-bottom:12px;">
+          <span class="streak-flame">🔥</span>
+          <div class="streak-info">
+            <div class="streak-count" id="streakCount">0</div>
+            <div class="streak-sub">Day streak · <span id="totalSessions">0</span> sessions total</div>
+          </div>
+        </div>
         <div class="statgrid">
           <div class="stat">
             <strong id="timer">00:00</strong>
@@ -1067,6 +1252,12 @@ button { cursor: pointer; border: 0; outline: 0; }
             <strong id="turns">0</strong>
             <span>Your Turns</span>
           </div>
+        </div>
+        <!-- VOICE SPEED -->
+        <div class="speed-control" style="margin-top:12px;">
+          <label>🔊 Speed</label>
+          <input type="range" id="speedSlider" min="0.6" max="1.5" step="0.05" value="1.0">
+          <span class="speed-val" id="speedVal">1.0×</span>
         </div>
       </section>
 
@@ -1111,6 +1302,8 @@ button { cursor: pointer; border: 0; outline: 0; }
       <button class="btn" id="closeModalBtn" style="padding: 6px 12px;">✕</button>
     </div>
     <div class="modal-body">
+      <!-- SESSION STATS SUMMARY -->
+      <div id="reportStats" style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;"></div>
       <p style="color: var(--muted); margin-top: 0;">Here is a comprehensive summary of your speaking session:</p>
       <div class="report-content" id="reportText">Compiling your personalized learning report...</div>
     </div>
@@ -1129,6 +1322,7 @@ button { cursor: pointer; border: 0; outline: 0; }
 <script>
 const $ = id => document.getElementById(id);
 
+// ─── STATE ──────────────────────────────────────────────────────────────────
 let history = [];
 let running = false;
 let listening = false;
@@ -1140,13 +1334,147 @@ let sessionStartTime = 0;
 let clockInterval = null;
 let turnsCount = 0;
 let capturedVocab = new Set();
+let playbackRate = 1.0;
 
+// ─── LOCALSTORAGE HELPERS ────────────────────────────────────────────────────
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : def; } catch { return def; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+
+// ─── SETTINGS PERSISTENCE ────────────────────────────────────────────────────
+(function restoreSettings() {
+  const saved = LS.get("vb_prefs", null);
+  if (saved) {
+    if (saved.track) $("track").value = saved.track;
+    if (saved.level) $("level").value = saved.level;
+    if (saved.language) $("language").value = saved.language;
+  }
+  const speed = LS.get("vb_speed", 1.0);
+  playbackRate = speed;
+  $("speedSlider").value = speed;
+  $("speedVal").textContent = speed.toFixed(2).replace(/\.?0+$/, "") + "×";
+})();
+
+function savePrefs() {
+  LS.set("vb_prefs", { track: $("track").value, level: $("level").value, language: $("language").value });
+}
+
+// ─── STREAK & SESSIONS ───────────────────────────────────────────────────────
+(function initStreak() {
+  const today = new Date().toDateString();
+  const lastDay = LS.get("vb_last_day", null);
+  let streak = LS.get("vb_streak", 0);
+  const totalSessions = LS.get("vb_total_sessions", 0);
+
+  if (lastDay === today) {
+    // same day — keep streak as-is
+  } else if (lastDay === new Date(Date.now() - 86400000).toDateString()) {
+    // consecutive day — will increment on first session start
+  } else if (lastDay !== null) {
+    // streak broken
+    streak = 0;
+    LS.set("vb_streak", 0);
+  }
+
+  $("streakCount").textContent = streak;
+  $("totalSessions").textContent = totalSessions;
+})();
+
+function bumpStreak() {
+  const today = new Date().toDateString();
+  const lastDay = LS.get("vb_last_day", null);
+  let streak = LS.get("vb_streak", 0);
+
+  if (lastDay !== today) {
+    if (lastDay === new Date(Date.now() - 86400000).toDateString()) {
+      streak++;
+    } else if (lastDay === null) {
+      streak = 1;
+    } else {
+      streak = 1; // reset if gap
+    }
+    LS.set("vb_streak", streak);
+    LS.set("vb_last_day", today);
+  }
+  const total = LS.get("vb_total_sessions", 0) + 1;
+  LS.set("vb_total_sessions", total);
+  $("streakCount").textContent = streak;
+  $("totalSessions").textContent = total;
+}
+
+// ─── VOCAB VAULT PERSISTENCE ─────────────────────────────────────────────────
+(function restoreVocabVault() {
+  const saved = LS.get("vb_vocab", []);
+  if (saved.length > 0) {
+    saved.forEach(({ word, snippet }) => {
+      capturedVocab.add(word.toLowerCase());
+      _renderVocabCard(word, snippet, false);
+    });
+  }
+})();
+
+// ─── WORD OF THE DAY ─────────────────────────────────────────────────────────
+(function loadWordOfTheDay() {
+  const todayKey = new Date().toDateString();
+  const cached = LS.get("vb_wotd_" + todayKey, null);
+  if (cached) {
+    renderWotd(cached);
+    return;
+  }
+  fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: "Give me one single advanced English power word as today's Word of the Day. Format: WORD: [word] | MEANING: [one-line meaning in English] | EXAMPLE: [one short example sentence]. No extra text.",
+      history: [],
+      preferences: { language: "English", track: "power_vocab", level: "intermediate" }
+    })
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.reply) {
+        LS.set("vb_wotd_" + todayKey, data.reply);
+        renderWotd(data.reply);
+      } else {
+        $("wotdContent").innerHTML = `<span style="color:var(--muted);font-size:12px;">Word of the Day unavailable. Start a session to discover power words!</span>`;
+      }
+    })
+    .catch(() => {
+      $("wotdContent").innerHTML = `<span style="color:var(--muted);font-size:12px;">Could not load Word of the Day.</span>`;
+    });
+})();
+
+function renderWotd(text) {
+  const wordMatch = text.match(/WORD:\s*([^\|]+)/i);
+  const meaningMatch = text.match(/MEANING:\s*([^\|]+)/i);
+  const exampleMatch = text.match(/EXAMPLE:\s*(.+)/i);
+  const word = wordMatch ? wordMatch[1].trim() : null;
+  const meaning = meaningMatch ? meaningMatch[1].trim() : text;
+  const example = exampleMatch ? exampleMatch[1].trim() : "";
+
+  if (!word) {
+    $("wotdContent").innerHTML = `<div class="wotd-meaning">${text}</div>`;
+    return;
+  }
+
+  $("wotdContent").innerHTML = `
+    <div class="wotd-word">
+      ${word}
+      <button onclick="playVoice('${word.replace(/'/g, "\\'")}')">🔊</button>
+    </div>
+    <div class="wotd-meaning">${meaning}${example ? `<br><span style="color:#64748b;font-style:italic;">e.g. "${example}"</span>` : ""}</div>
+  `;
+}
+
+// ─── GETPREFS ────────────────────────────────────────────────────────────────
 const getPrefs = () => ({
   language: $("language").value,
   track: $("track").value,
   level: $("level").value
 });
 
+// ─── TOAST ───────────────────────────────────────────────────────────────────
 function showToast(message, type = "info") {
   const container = $("toastContainer");
   const toast = document.createElement("div");
@@ -1160,6 +1488,7 @@ function showToast(message, type = "info") {
   }, 4000);
 }
 
+// ─── ORB STATES ──────────────────────────────────────────────────────────────
 function setOrbState(state) {
   const orb = $("orb");
   orb.className = "orb state-" + state;
@@ -1178,12 +1507,22 @@ function setStage(title, sub, status = "Ready", orbState = "idle") {
   setOrbState(orbState);
 }
 
+// ─── CHAT BUBBLES ────────────────────────────────────────────────────────────
 function addNote(text) {
   const div = document.createElement("div");
   div.className = "bubble note";
   div.textContent = text;
   $("chat").appendChild(div);
   scrollChat();
+}
+
+function highlightPowerWords(text) {
+  // Replace **word** markdown with clickable cyan highlighted spans
+  return text
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\*\*([A-Za-z\s'-]{2,30})\*\*/g, (_, w) =>
+      `<span class="power-word" title="Click to hear pronunciation" onclick="playVoice('${w.replace(/'/g,"\\'")}')">⚡ ${w}</span>`
+    );
 }
 
 function addBubble(role, text) {
@@ -1203,8 +1542,12 @@ function addBubble(role, text) {
     tag.appendChild(replayBtn);
   }
 
-  const body = document.createElement("span");
-  body.textContent = text;
+  const body = document.createElement("div");
+  if (role === "assistant") {
+    body.innerHTML = highlightPowerWords(text);
+  } else {
+    body.textContent = text;
+  }
 
   div.append(tag, body);
   $("chat").appendChild(div);
@@ -1215,37 +1558,37 @@ function addBubble(role, text) {
   }
 }
 
-// VOCABULARY EXTRACTION FOR VOCAB VAULT
+// ─── VOCAB VAULT ──────────────────────────────────────────────────────────────
 function extractAndAddVocab(text) {
-  // Extract words emphasized in quotes or bold markdown
   const boldMatches = text.match(/\*\*([A-Za-z\s-]{3,24})\*\*/g);
   if (boldMatches) {
     boldMatches.forEach(raw => {
       const word = raw.replace(/\*/g, "").trim();
       if (word.length > 2 && !capturedVocab.has(word.toLowerCase())) {
         capturedVocab.add(word.toLowerCase());
-        addVocabCard(word, text);
+        const sentences = text.split(/(?<=[.?!])\s+/);
+        const relevantSentence = sentences.find(s => s.toLowerCase().includes(word.toLowerCase()));
+        const snippet = relevantSentence ? relevantSentence.replace(/\*\*/g, "").trim() : "Introduced in conversation context.";
+        _renderVocabCard(word, snippet, true);
+        // persist to localStorage
+        const saved = LS.get("vb_vocab", []);
+        if (!saved.find(x => x.word.toLowerCase() === word.toLowerCase())) {
+          saved.unshift({ word, snippet });
+          if (saved.length > 60) saved.pop(); // cap at 60 words
+          LS.set("vb_vocab", saved);
+        }
       }
     });
   }
 }
 
-function addVocabCard(word, context) {
+function _renderVocabCard(word, snippet, prepend = true) {
   const vault = $("vocabVault");
   const empty = $("vaultEmpty");
   if (empty) empty.remove();
 
   const card = document.createElement("div");
   card.className = "vocab-card";
-
-  // Quick definition extraction or snippet
-  let snippet = `Introduced in conversation context.`;
-  const sentences = context.split(/(?<=[.?!])\s+/);
-  const relevantSentence = sentences.find(s => s.toLowerCase().includes(word.toLowerCase()));
-  if (relevantSentence) {
-    snippet = relevantSentence.replace(/\*\*/g, "").trim();
-  }
-
   card.innerHTML = `
     <div class="vocab-header">
       <span class="vocab-word">⚡ ${word}</span>
@@ -1253,16 +1596,21 @@ function addVocabCard(word, context) {
     </div>
     <div class="vocab-meaning">${snippet}</div>
   `;
+  card.querySelector(".vocab-audio-btn").onclick = e => { e.stopPropagation(); playVoice(word); };
 
-  card.querySelector(".vocab-audio-btn").onclick = (e) => {
-    e.stopPropagation();
-    playVoice(word);
-  };
-
-  vault.prepend(card);
+  if (prepend) vault.prepend(card); else vault.appendChild(card);
   $("vaultCount").textContent = `${capturedVocab.size} words captured`;
 }
 
+// Clear saved vault button (optional — only if user asks)
+window.clearVocabVault = function() {
+  LS.set("vb_vocab", []);
+  capturedVocab.clear();
+  $("vocabVault").innerHTML = `<div class="vocab-card" id="vaultEmpty"><div class="vocab-header"><span class="vocab-word">Vocab Vault Cleared</span></div><div class="vocab-meaning">Start practicing to capture new power words!</div></div>`;
+  $("vaultCount").textContent = "0 words captured";
+};
+
+// ─── CHAT UTILS ──────────────────────────────────────────────────────────────
 function scrollChat() {
   const chat = $("chat");
   chat.scrollTop = chat.scrollHeight;
@@ -1291,7 +1639,7 @@ function enableControls(enabled) {
   }
 }
 
-// STOP & INTERRUPT AUDIO
+// ─── AUDIO ───────────────────────────────────────────────────────────────────
 function stopVoice() {
   if (currentAudio) {
     currentAudio.pause();
@@ -1301,16 +1649,13 @@ function stopVoice() {
     URL.revokeObjectURL(audioUrl);
     audioUrl = null;
   }
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-  }
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
   $("stopVoiceBtn").disabled = true;
   if (running && !listening) {
     setStage("Your turn", "Tap Speak or type your answer. Interrupt anytime.", "Listening ready", "idle");
   }
 }
 
-// BROWSER TTS FALLBACK
 function fallbackSpeak(text) {
   const langMap = {
     English: "en-IN", Hindi: "hi-IN", Gujarati: "gu-IN", Marathi: "mr-IN",
@@ -1318,12 +1663,11 @@ function fallbackSpeak(text) {
     Malayalam: "ml-IN", Punjabi: "pa-IN"
   };
   const locale = langMap[getPrefs().language] || "en-IN";
-
   if ("speechSynthesis" in window) {
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = locale;
-    utterance.rate = 0.95;
+    utterance.rate = playbackRate * 0.95;
     utterance.onstart = () => {
       $("stopVoiceBtn").disabled = false;
       $("replayBtn").disabled = false;
@@ -1344,7 +1688,6 @@ function fallbackSpeak(text) {
   }
 }
 
-// PLAY SYNTHETIC VOICE
 async function playVoice(text) {
   if (!text) return;
   stopVoice();
@@ -1362,32 +1705,22 @@ async function playVoice(text) {
     const contentType = response.headers.get("Content-Type") || "";
     if (contentType.includes("application/json")) {
       const data = await response.json();
-      if (data.fallbackToBrowser) {
-        fallbackSpeak(text);
-        return;
-      }
+      if (data.fallbackToBrowser) { fallbackSpeak(text); return; }
       throw new Error(data.error || "Speech synthesis failed.");
     }
 
-    if (!response.ok) {
-      throw new Error("Speech synthesis request failed (" + response.status + ")");
-    }
+    if (!response.ok) throw new Error("Speech synthesis request failed (" + response.status + ")");
 
     const blob = await response.blob();
     audioUrl = URL.createObjectURL(blob);
     currentAudio = new Audio(audioUrl);
+    currentAudio.playbackRate = playbackRate;
 
     currentAudio.onended = () => {
       stopVoice();
-      if (running) {
-        setStage("Your turn", "Tap Speak or type your reply.", "Listening ready", "idle");
-      }
+      if (running) setStage("Your turn", "Tap Speak or type your reply.", "Listening ready", "idle");
     };
-
-    currentAudio.onerror = () => {
-      stopVoice();
-      fallbackSpeak(text);
-    };
+    currentAudio.onerror = () => { stopVoice(); fallbackSpeak(text); };
 
     await currentAudio.play();
     setStage("VocaBuddy is speaking", "Speaking. You can tap 'Interrupt Audio' to stop anytime.", "Speaking", "speaking");
@@ -1397,7 +1730,7 @@ async function playVoice(text) {
   }
 }
 
-// ASK TUTOR
+// ─── ASK TUTOR ───────────────────────────────────────────────────────────────
 async function askTutor(text, isReport = false) {
   if (!running || !text.trim()) return;
   const clean = text.trim();
@@ -1426,9 +1759,7 @@ async function askTutor(text, isReport = false) {
     });
 
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      throw new Error(data.error || "Request failed.");
-    }
+    if (!response.ok) throw new Error(data.error || "Request failed.");
 
     const reply = data.reply;
     history.push({ role: "assistant", content: reply });
@@ -1457,7 +1788,7 @@ async function askTutor(text, isReport = false) {
   }
 }
 
-// MICROPHONE SPEECH RECOGNITION
+// ─── MIC ─────────────────────────────────────────────────────────────────────
 function startListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
@@ -1465,16 +1796,10 @@ function startListening() {
     addNote("Microphone unsupported in this browser. Use the text box below.");
     return;
   }
-
   if (!running) return;
-
-  if (listening) {
-    if (recognition) recognition.stop();
-    return;
-  }
+  if (listening) { if (recognition) recognition.stop(); return; }
 
   stopVoice();
-
   try {
     recognition = new SR();
     recognition.lang = "en-IN";
@@ -1498,11 +1823,8 @@ function startListening() {
   recognition.onresult = event => {
     let interim = "";
     for (let i = event.resultIndex; i < event.results.length; i++) {
-      if (event.results[i].isFinal) {
-        recordedFinal += event.results[i][0].transcript;
-      } else {
-        interim += event.results[i][0].transcript;
-      }
+      if (event.results[i].isFinal) recordedFinal += event.results[i][0].transcript;
+      else interim += event.results[i][0].transcript;
     }
     const current = recordedFinal || interim || "Listening...";
     $("hearingText").textContent = current;
@@ -1522,13 +1844,9 @@ function startListening() {
     $("talkBtn").textContent = "🎙️ Speak";
     $("talkBtn").classList.remove("active-listening");
     $("hearingBox").style.display = "none";
-
     const speechText = recordedFinal.trim();
-    if (speechText) {
-      askTutor(speechText);
-    } else if (running) {
-      setStage("Didn't catch that", "Tap Speak again or type your answer in the box below.", "Ready", "idle");
-    }
+    if (speechText) askTutor(speechText);
+    else if (running) setStage("Didn't catch that", "Tap Speak again or type your answer in the box below.", "Ready", "idle");
   };
 
   try {
@@ -1542,7 +1860,7 @@ function startListening() {
   }
 }
 
-// SESSION MANAGEMENT
+// ─── SESSION ──────────────────────────────────────────────────────────────────
 async function startSession() {
   history = [];
   turnsCount = 0;
@@ -1553,8 +1871,6 @@ async function startSession() {
   enableControls(true);
   $("startBtn").disabled = true;
   $("startBtn").textContent = "⚡ Session Active";
-
-  // DO NOT DISABLE FILTERS! KEEP THEM FULLY INTERACTIVE & CLICKABLE!
   $("track").disabled = false;
   $("level").disabled = false;
   $("language").disabled = false;
@@ -1562,81 +1878,92 @@ async function startSession() {
   if (clockInterval) clearInterval(clockInterval);
   clockInterval = setInterval(updateClock, 1000);
 
-  addNote("Practice session started · Live Vocab Vault Active");
+  bumpStreak();
+  addNote("Practice session started · Live Vocab Vault Active · Ctrl+M for mic");
 
   const selectedTrack = $("track").value;
   let starterPrompt = "Start our English coaching session. Greet me warmly and ask one engaging question.";
-  if (selectedTrack === "power_vocab") {
-    starterPrompt = "Welcome me to our Power Vocabulary practice. Introduce yourself and ask me to describe how my day is going so we can upgrade my words!";
-  } else if (selectedTrack === "idioms_phrases") {
-    starterPrompt = "Welcome me to our Native Idioms practice. Introduce yourself and share one cool everyday idiom!";
-  } else if (selectedTrack === "interview") {
-    starterPrompt = "Start a job interview practice session. Greet me as the hiring manager and ask the first classic question.";
-  } else if (selectedTrack === "meeting") {
-    starterPrompt = "Start a corporate meeting simulation. Greet me and ask for my project update.";
-  }
+  if (selectedTrack === "power_vocab") starterPrompt = "Welcome me to our Power Vocabulary practice. Introduce yourself and ask me to describe how my day is going so we can upgrade my words!";
+  else if (selectedTrack === "idioms_phrases") starterPrompt = "Welcome me to our Native Idioms practice. Introduce yourself and share one cool everyday idiom!";
+  else if (selectedTrack === "interview") starterPrompt = "Start a job interview practice session. Greet me as the hiring manager and ask the first classic question.";
+  else if (selectedTrack === "meeting") starterPrompt = "Start a corporate meeting simulation. Greet me and ask for my project update.";
 
   await askTutor(starterPrompt);
 }
 
 function endSession() {
-  if (recognition) {
-    try { recognition.abort(); } catch (e) {}
-    recognition = null;
-  }
+  if (recognition) { try { recognition.abort(); } catch (e) {} recognition = null; }
   listening = false;
   stopVoice();
   running = false;
-
   if (clockInterval) clearInterval(clockInterval);
   clockInterval = null;
-
   enableControls(false);
   $("startBtn").disabled = false;
   $("startBtn").textContent = "⚡ Start Practice";
-
   setStage("Session Ended", "You completed your practice session. Review your transcript or start a new session.", "Ready", "idle");
   addNote("Session ended.");
 }
 
-// DYNAMIC FILTER CHANGE LISTENERS (UPDATE PREFERENCES MID-SESSION)
-$("track").onchange = () => {
-  showToast(`Practice focus updated: ${$("track").options[$("track").selectedIndex].text}`, "success");
-};
-$("level").onchange = () => {
-  showToast(`Fluency level updated: ${$("level").options[$("level").selectedIndex].text}`, "success");
-};
-$("language").onchange = () => {
-  showToast(`Explanation language updated: ${$("language").value}`, "success");
+// ─── FILTER CHANGE LISTENERS ─────────────────────────────────────────────────
+$("track").onchange = () => { showToast(`Practice focus: ${$("track").options[$("track").selectedIndex].text}`, "success"); savePrefs(); };
+$("level").onchange = () => { showToast(`Level: ${$("level").options[$("level").selectedIndex].text}`, "success"); savePrefs(); };
+$("language").onchange = () => { showToast(`Language: ${$("language").value}`, "success"); savePrefs(); };
+
+// ─── SPEED SLIDER ─────────────────────────────────────────────────────────────
+$("speedSlider").oninput = function() {
+  playbackRate = parseFloat(this.value);
+  $("speedVal").textContent = playbackRate.toFixed(2).replace(/\.?0+$/, "") + "×";
+  LS.set("vb_speed", playbackRate);
+  if (currentAudio) currentAudio.playbackRate = playbackRate;
 };
 
-// REPORT MODAL
+// ─── CHAR COUNTER ─────────────────────────────────────────────────────────────
+$("messageInput").oninput = function() {
+  const len = this.value.length;
+  const counter = $("charCounter");
+  counter.textContent = `${len} / 3000`;
+  counter.className = "char-counter" + (len > 2700 ? " danger" : len > 2000 ? " warn" : "");
+};
+
+// ─── KEYBOARD SHORTCUT ────────────────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "m") {
+    e.preventDefault();
+    if (running && !$("talkBtn").disabled) startListening();
+  }
+});
+
+// ─── REPORT MODAL ─────────────────────────────────────────────────────────────
 function openReportModal(reportContent) {
   $("reportText").textContent = reportContent;
+  // Session stats
+  const statsEl = $("reportStats");
+  const elapsed = sessionStartTime ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
+  const secs = String(elapsed % 60).padStart(2, "0");
+  const statStyle = `background:rgba(15,23,42,0.6);border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-size:12px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:2px;`;
+  const bigStyle = `font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--cyan);line-height:1.1;`;
+  statsEl.innerHTML = `
+    <div style="${statStyle}"><span style="${bigStyle}">${mins}:${secs}</span><span>Session Time</span></div>
+    <div style="${statStyle}"><span style="${bigStyle}">${turnsCount}</span><span>Your Turns</span></div>
+    <div style="${statStyle}"><span style="${bigStyle}">${capturedVocab.size}</span><span>Words Captured</span></div>
+    <div style="${statStyle}"><span style="${bigStyle}">${LS.get("vb_streak", 0)}🔥</span><span>Day Streak</span></div>
+  `;
   $("reportModal").classList.add("open");
 }
-function closeReportModal() {
-  $("reportModal").classList.remove("open");
-}
+function closeReportModal() { $("reportModal").classList.remove("open"); }
 function requestReport() {
-  if (!running) {
-    showToast("Please start a practice session first.", "info");
-    return;
-  }
+  if (!running) { showToast("Please start a practice session first.", "info"); return; }
   askTutor("Please review my English from this entire session and provide a comprehensive learning report with: 1. Communication Strengths, 2. Areas for Improvement, 3. Common Grammar Mistakes and Natural Alternatives, 4. Words Learned and Key Vocabulary, 5. Recommended Next Practice Activity.", true);
 }
 
-// EVENT LISTENERS
+// ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
 $("startBtn").onclick = startSession;
 $("talkBtn").onclick = startListening;
 $("endBtn").onclick = endSession;
-$("stopVoiceBtn").onclick = () => {
-  stopVoice();
-  setStage("Audio Stopped", "Audio paused. Tap Speak or type your reply.", "Ready", "idle");
-};
-$("replayBtn").onclick = () => {
-  if (lastSpokenText) playVoice(lastSpokenText);
-};
+$("stopVoiceBtn").onclick = () => { stopVoice(); setStage("Audio Stopped", "Audio paused. Tap Speak or type your reply.", "Ready", "idle"); };
+$("replayBtn").onclick = () => { if (lastSpokenText) playVoice(lastSpokenText); };
 
 $("form").onsubmit = e => {
   e.preventDefault();
@@ -1644,48 +1971,38 @@ $("form").onsubmit = e => {
   const text = input.value.trim();
   if (!text) return;
   input.value = "";
+  $("charCounter").textContent = "0 / 3000";
+  $("charCounter").className = "char-counter";
   askTutor(text);
 };
 
 $("reviewBtn").onclick = requestReport;
 
-// SCENARIOS CHIPS INTERACTION (ALWAYS CLICKABLE)
 $("scenarioChips").onclick = e => {
   const chip = e.target.closest(".chip");
   if (!chip) return;
-
   document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
   chip.classList.add("active");
-
   const track = chip.dataset.track;
   const prompt = chip.dataset.prompt;
-
   if (track) $("track").value = track;
-
   if (!running) {
-    startSession().then(() => {
-      setTimeout(() => askTutor(prompt), 900);
-    });
+    startSession().then(() => { setTimeout(() => askTutor(prompt), 900); });
   } else {
     askTutor(prompt);
   }
 };
 
-// TRANSCRIPT EXPORT
 $("copyBtn").onclick = async () => {
   if (history.length === 0) return;
   const text = history.map(x => (x.role === "user" ? "You: " : "VocaBuddy: ") + x.content).join("\n\n");
-  try {
-    await navigator.clipboard.writeText(text);
-    showToast("Transcript copied to clipboard!", "success");
-  } catch (e) {
-    showToast("Clipboard access denied.", "error");
-  }
+  try { await navigator.clipboard.writeText(text); showToast("Transcript copied!", "success"); }
+  catch (e) { showToast("Clipboard access denied.", "error"); }
 };
 
 $("downloadTranscriptBtn").onclick = () => {
   if (history.length === 0) return;
-  const text = `VOCABUDDY PRACTICE TRANSCRIPT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\nTurns: ${turnsCount}\n\n` +
+  const text = `VOCABUDDY PRACTICE TRANSCRIPT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\nTurns: ${turnsCount}\nWords Captured: ${capturedVocab.size}\n\n` +
     history.map(x => `[${x.role === "user" ? "YOU" : "VOCABUDDY"}]\n${x.content}\n`).join("\n");
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
@@ -1696,27 +2013,15 @@ $("downloadTranscriptBtn").onclick = () => {
   showToast("Transcript downloaded!", "success");
 };
 
-// REPORT MODAL BUTTONS
 $("closeModalBtn").onclick = closeReportModal;
-$("voiceReportBtn").onclick = () => {
-  const text = $("reportText").textContent.trim();
-  if (text) playVoice(text);
-};
-$("newSessionBtn").onclick = () => {
-  closeReportModal();
-  endSession();
-  startSession();
-};
+$("voiceReportBtn").onclick = () => { const text = $("reportText").textContent.trim(); if (text) playVoice(text); };
+$("newSessionBtn").onclick = () => { closeReportModal(); endSession(); startSession(); };
 $("copyReportBtn").onclick = async () => {
-  try {
-    await navigator.clipboard.writeText($("reportText").textContent);
-    showToast("Learning report copied to clipboard!", "success");
-  } catch (e) {
-    showToast("Failed to copy report.", "error");
-  }
+  try { await navigator.clipboard.writeText($("reportText").textContent); showToast("Report copied!", "success"); }
+  catch (e) { showToast("Failed to copy report.", "error"); }
 };
 $("downloadReportBtn").onclick = () => {
-  const text = `VOCABUDDY ENGLISH & VOCABULARY REPORT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\n\n${$("reportText").textContent}`;
+  const text = `VOCABUDDY ENGLISH & VOCABULARY REPORT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\nWords Captured: ${capturedVocab.size}\n\n${$("reportText").textContent}`;
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -1732,7 +2037,7 @@ window.addEventListener("beforeunload", () => {
   if (clockInterval) clearInterval(clockInterval);
 });
 
-// INITIAL HEALTH CHECK
+// HEALTH CHECK
 fetch("/api/health")
   .then(r => r.json())
   .then(info => {
@@ -1740,9 +2045,7 @@ fetch("/api/health")
       setStage("Setup Needed", "Configure API key in server environment before starting.", "Config Needed", "idle");
     }
   })
-  .catch(() => {
-    setStage("Server Offline", "Cannot connect to backend server.", "Offline", "idle");
-  });
+  .catch(() => { setStage("Server Offline", "Cannot connect to backend server.", "Offline", "idle"); });
 </script>
 </body>
 </html>
