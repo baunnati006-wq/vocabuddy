@@ -162,22 +162,12 @@ async function getMagpieVoices() {
 // Cleans text for natural Text-To-Speech pronunciation (removes markdown, emojis, asterisks)
 function cleanTextForTTS(text) {
   if (!text) return "";
-  let clean = text
+  return text
     .replace(/[*#_~`>]/g, "") // markdown characters
     .replace(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "") // emojis
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // markdown links
     .replace(/\s+/g, " ")
     .trim();
-
-  // If text is a long report (over 380 chars), speak a friendly summary introductory sentence so TTS stays crisp
-  if (clean.length > 380) {
-    const sentences = clean.split(/(?<=[.?!])\s+/);
-    if (sentences.length > 1 && sentences[0].length < 200) {
-      return sentences.slice(0, 2).join(" ") + " You can read your complete report on screen!";
-    }
-    return clean.slice(0, 300) + "... You can view the full details on your screen!";
-  }
-  return clean;
 }
 
 async function chooseMagpieVoice(text, requestedLanguage) {
@@ -281,7 +271,7 @@ app.post("/api/speech", async (req, res) => {
     return res.status(503).json({ error: "Speech service is not configured on server." });
   }
 
-  const rawText = typeof req.body?.text === "string" ? req.body.text.trim().slice(0, 2000) : "";
+  const rawText = typeof req.body?.text === "string" ? req.body.text.trim().slice(0, 4000) : "";
   if (!rawText) return res.status(400).json({ error: "No text provided for speech synthesis." });
 
   const textToSpeak = cleanTextForTTS(rawText);

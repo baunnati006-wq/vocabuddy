@@ -1115,6 +1115,7 @@ button { cursor: pointer; border: 0; outline: 0; }
       <div class="report-content" id="reportText">Compiling your personalized learning report...</div>
     </div>
     <div class="modal-actions">
+      <button class="btn" id="voiceReportBtn">🔊 Replay Audio</button>
       <button class="btn" id="copyReportBtn">📋 Copy Report</button>
       <button class="btn" id="downloadReportBtn">💾 Download (.txt)</button>
       <button class="btn btn-primary" id="newSessionBtn">🔄 Start New Session</button>
@@ -1434,9 +1435,9 @@ async function askTutor(text, isReport = false) {
 
     if (isReport) {
       openReportModal(reply);
-      addBubble("assistant", "🌟 I have compiled your English & Vocabulary Report! Review your strengths, new words learned, and next practice goal in the report window.");
-      setStage("Report Ready", "Review your personalized feedback and vocabulary goals.", "Report Complete", "idle");
-      playVoice("Here is your English practice report with your strengths and key areas for improvement. You can review all details on screen!");
+      addBubble("assistant", reply);
+      setStage("Report Complete", "VocaBuddy is reading your complete feedback report aloud…", "Speaking Report", "speaking");
+      await playVoice(reply);
     } else {
       addBubble("assistant", reply);
       setStage("VocaBuddy replied", "Playing spoken response…", "Speaking", "speaking");
@@ -1697,6 +1698,10 @@ $("downloadTranscriptBtn").onclick = () => {
 
 // REPORT MODAL BUTTONS
 $("closeModalBtn").onclick = closeReportModal;
+$("voiceReportBtn").onclick = () => {
+  const text = $("reportText").textContent.trim();
+  if (text) playVoice(text);
+};
 $("newSessionBtn").onclick = () => {
   closeReportModal();
   endSession();
