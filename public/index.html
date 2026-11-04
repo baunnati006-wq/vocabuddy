@@ -1,0 +1,1552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>VocaBuddy — NVIDIA AI Voice Coach (V3.2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b16;
+  --panel: rgba(18, 25, 47, 0.72);
+  --panel-solid: #12192f;
+  --panel-border: rgba(99, 122, 175, 0.22);
+  --line: rgba(110, 138, 195, 0.18);
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --violet: #8b5cf6;
+  --violet-glow: rgba(139, 92, 246, 0.45);
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6, 182, 212, 0.45);
+  --emerald: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.4);
+  --rose: #f43f5e;
+  --amber: #f59e0b;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(ellipse 65% 50% at 15% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 85% 10%, rgba(6, 182, 212, 0.18) 0%, transparent 55%),
+    radial-gradient(circle 500px at 50% 90%, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+button, input, select { font-family: inherit; }
+button { cursor: pointer; border: 0; outline: 0; }
+
+.shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+/* TOP HEADER */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.35);
+}
+.brand h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, #ffffff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+.badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--panel-border);
+  border-radius: 30px;
+  padding: 6px 14px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+}
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--emerald);
+  box-shadow: 0 0 10px var(--emerald);
+}
+
+/* HERO */
+.hero {
+  padding: 28px 0 16px;
+}
+.eyebrow {
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero h2 {
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+}
+.hero h2 span {
+  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero p {
+  max-width: 780px;
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0;
+}
+
+/* SETTINGS CONTROLS */
+.settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.setting {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s;
+}
+.setting:focus-within {
+  border-color: var(--cyan);
+}
+.setting label {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.setting select {
+  width: 100%;
+  background: transparent;
+  color: var(--ink);
+  border: 0;
+  outline: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.setting option {
+  background: #12192f;
+  color: #fff;
+}
+
+/* SCENARIO QUICK CHIPS */
+.scenarios {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+  scrollbar-width: none;
+}
+.scenarios::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  color: #cbd5e1;
+  padding: 6px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.chip:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+  border-color: var(--cyan);
+  transform: translateY(-1px);
+}
+
+/* MAIN LAYOUT */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.85fr);
+  gap: 18px;
+  align-items: start;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+}
+.main-stage {
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* STAGE HEADER & ORB */
+.stage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.stage-head h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #64748b;
+  transition: all 0.3s;
+}
+.dot.live { background: var(--emerald); box-shadow: 0 0 10px var(--emerald); }
+.dot.thinking { background: var(--violet); box-shadow: 0 0 10px var(--violet); }
+.dot.speaking { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+.dot.mic { background: var(--rose); box-shadow: 0 0 12px var(--rose); }
+
+.stage-body {
+  border-bottom: 1px solid var(--line);
+  padding: 24px 12px 20px;
+  text-align: center;
+  position: relative;
+}
+
+/* ORB VISUAL */
+.orb-container {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+}
+.orb-waves {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.orb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #ffffff 0%, #a78bfa 35%, #06b6d4 75%, #0f172a 100%);
+  box-shadow: 0 0 35px rgba(139, 92, 246, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.35);
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+/* ORB STATES */
+.orb.state-idle {
+  animation: floatIdle 4s ease-in-out infinite;
+}
+.orb.state-listening {
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #34d399 35%, #06b6d4 75%, #0f172a 100%);
+  box-shadow: 0 0 50px rgba(16, 185, 129, 0.65), inset 0 0 25px rgba(255, 255, 255, 0.5);
+  animation: pulseListening 1.2s infinite;
+}
+.orb.state-thinking {
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #c084fc 35%, #6366f1 75%, #0f172a 100%);
+  box-shadow: 0 0 55px rgba(168, 85, 247, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.4);
+  animation: spinThinking 2s linear infinite;
+}
+.orb.state-speaking {
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #38bdf8 30%, #818cf8 70%, #0f172a 100%);
+  box-shadow: 0 0 60px rgba(56, 189, 248, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.5);
+  animation: pulseSpeaking 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes floatIdle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.02); }
+}
+@keyframes pulseListening {
+  0% { transform: scale(0.97); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.07); box-shadow: 0 0 65px rgba(16, 185, 129, 0.85); }
+  100% { transform: scale(0.97); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+}
+@keyframes spinThinking {
+  0% { transform: rotate(0deg) scale(1.03); filter: hue-rotate(0deg); }
+  100% { transform: rotate(360deg) scale(1.03); filter: hue-rotate(90deg); }
+}
+@keyframes pulseSpeaking {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); box-shadow: 0 0 70px rgba(6, 182, 212, 0.85); }
+}
+
+.stage-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.stage-sub {
+  font-size: 13.5px;
+  color: var(--muted);
+  max-width: 540px;
+  margin: 0 auto 16px;
+  min-height: 22px;
+}
+.hearing-preview {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  max-width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ACTION BUTTONS */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--ink);
+  border: 1px solid var(--panel-border);
+}
+.btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  border: 0;
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+}
+
+.btn-mic {
+  background: linear-gradient(135deg, #0d9488, #06b6d4);
+  color: #042526;
+  border: 0;
+  font-weight: 800;
+  box-shadow: 0 4px 18px rgba(6, 182, 212, 0.35);
+}
+.btn-mic:hover:not(:disabled) {
+  background: linear-gradient(135deg, #14b8a6, #22d3ee);
+  box-shadow: 0 6px 24px rgba(6, 182, 212, 0.5);
+}
+.btn-mic.active-listening {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  color: #fff;
+  animation: pulseListeningBtn 1s infinite alternate;
+}
+@keyframes pulseListeningBtn {
+  0% { transform: scale(1); box-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
+  100% { transform: scale(1.03); box-shadow: 0 0 25px rgba(244, 63, 94, 0.8); }
+}
+
+.btn-stop {
+  color: #fecdd3;
+  border-color: rgba(244, 63, 94, 0.4);
+  background: rgba(244, 63, 94, 0.1);
+}
+.btn-stop:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.6);
+}
+
+/* CHAT TRANSCRIPT */
+.chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 2px 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.chat-head span {
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+.chat {
+  height: 310px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 6px 4px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.chat::-webkit-scrollbar { width: 5px; }
+.chat::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
+.bubble {
+  max-width: 86%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+  animation: bubbleFadeIn 0.25s ease-out;
+}
+@keyframes bubbleFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(79, 70, 229, 0.25));
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-bottom-right-radius: 4px;
+}
+.bubble.ai {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--panel-border);
+  border-bottom-left-radius: 4px;
+}
+.bubble.note {
+  align-self: center;
+  color: var(--muted);
+  font-size: 11px;
+  background: transparent;
+  border: 0;
+  text-align: center;
+  padding: 4px 10px;
+}
+.bubble-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.bubble-tag .replay-bubble-btn {
+  background: transparent;
+  color: var(--cyan);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.bubble-tag .replay-bubble-btn:hover {
+  opacity: 1;
+}
+
+/* COMPOSER */
+.composer {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.composer input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(14, 20, 38, 0.85);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  color: var(--ink);
+  padding: 12px 14px;
+  font-size: 13.5px;
+  outline: 0;
+  transition: border-color 0.2s;
+}
+.composer input:focus {
+  border-color: var(--violet);
+}
+
+/* SIDEBAR PANELS */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.side h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.statgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  padding: 12px;
+  border-radius: 14px;
+}
+.stat strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--cyan);
+}
+.stat span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 10px 0 0;
+  line-height: 1.45;
+}
+.tool-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--panel-border);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.tool-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--cyan);
+}
+.tool-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.list {
+  color: var(--muted);
+  font-size: 12.5px;
+  padding-left: 18px;
+  margin: 0;
+}
+.list li {
+  margin: 8px 0;
+}
+.notice {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fde68a;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* REPORT MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 11, 22, 0.85);
+  backdrop-filter: blur(16px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-card {
+  background: #0f172a;
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  transform: translateY(12px);
+  transition: transform 0.25s ease;
+}
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-head h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.report-content {
+  white-space: pre-wrap;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 10px;
+  color: #e2e8f0;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+}
+
+/* TOAST ALERTS */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1100;
+  max-width: 380px;
+  width: 90%;
+  pointer-events: none;
+}
+.toast {
+  background: #1e293b;
+  border: 1px solid var(--panel-border);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: auto;
+  animation: toastIn 0.25s ease-out;
+}
+.toast.error { border-color: var(--rose); background: #2b1117; color: #fecdd3; }
+.toast.success { border-color: var(--emerald); background: #062b1b; color: #a7f3d0; }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.footer {
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+  margin-top: 28px;
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  .settings { grid-template-columns: 1fr; }
+  .main-stage { min-height: 580px; }
+}
+@media (max-width: 560px) {
+  .shell { padding: 16px 12px 35px; }
+  .panel { padding: 16px; }
+  .chat { height: 260px; }
+  .statgrid { grid-template-columns: 1fr 1fr; }
+  .hero h2 { font-size: 26px; }
+  .orb { width: 85px; height: 85px; font-size: 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- TOP BRANDING -->
+  <header class="top">
+    <div class="brand">
+      <div class="logo-icon">🗣️</div>
+      <div>
+        <h1>VocaBuddy</h1>
+        <p>NVIDIA-Powered AI Voice Coach</p>
+      </div>
+    </div>
+    <div class="badges">
+      <div class="badge"><span class="badge-dot" id="headerDot"></span> <span id="headerEngine">NVIDIA Nemotron + Magpie</span></div>
+      <div class="badge">Edition · V3.2</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">Interactive Speaking Practice · Instant Synthetic Speech</div>
+    <h2>Master Spoken English with<br><span>NVIDIA Conversational AI.</span></h2>
+    <p>Practice everyday chit-chat, high-stakes job interviews, and workplace meetings. Speak aloud with your microphone, hear natural synthetic speech from NVIDIA Magpie, and get polite grammar corrections explained in your chosen language.</p>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="settings">
+    <div class="setting">
+      <label for="track">Practice Track</label>
+      <select id="track">
+        <option value="both">Everyday + Professional</option>
+        <option value="interview">💼 Job Interview Practice</option>
+        <option value="meeting">🤝 Workplace & Team Meetings</option>
+        <option value="presentation">🎤 Presentations & Pitching</option>
+        <option value="roleplay">🎭 Real-Life Roleplay</option>
+        <option value="grammar_vocab">📚 Grammar & Vocab Booster</option>
+        <option value="everyday">☕ Everyday English</option>
+        <option value="professional">👔 Professional English</option>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="level">Learner Level</label>
+      <select id="level">
+        <option value="beginner">Beginner (Simple & Patient)</option>
+        <option value="intermediate" selected>Intermediate (Conversational)</option>
+        <option value="advanced">Advanced (Nuanced & Fluent)</option>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="language">Explanations In</label>
+      <select id="language">
+        <option value="Hindi" selected>Hindi (हिन्दी)</option>
+        <option value="English">English</option>
+        <option value="Gujarati">Gujarati (ગુજરાતી)</option>
+        <option value="Marathi">Marathi (मराठी)</option>
+        <option value="Bengali">Bengali (বাংলা)</option>
+        <option value="Tamil">Tamil (தமிழ்)</option>
+        <option value="Telugu">Telugu (తెలుగు)</option>
+        <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
+        <option value="Malayalam">Malayalam (മലയാളം)</option>
+        <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- QUICK PRACTICE SCENARIOS -->
+  <div class="scenarios" id="scenarioChips">
+    <button class="chip" data-track="interview" data-prompt="Hi! Let's start a mock job interview. Ask me the first question.">💼 Job Interview</button>
+    <button class="chip" data-track="meeting" data-prompt="Let's practice a team meeting. Give me an update to respond to.">🤝 Team Meeting</button>
+    <button class="chip" data-track="presentation" data-prompt="I need to practice giving a presentation hook. How do I start?">🎤 Presentation Hook</button>
+    <button class="chip" data-track="everyday" data-prompt="Let's have a casual conversation about favorite hobbies and travel.">☕ Casual Chit-Chat</button>
+    <button class="chip" data-track="roleplay" data-prompt="Let's roleplay: you are a hotel receptionist and I am checking in.">🏨 Hotel Check-In</button>
+    <button class="chip" data-track="roleplay" data-prompt="Let's roleplay: you are a client and I am pitching our software services.">💻 Client Pitch</button>
+    <button class="chip" data-track="grammar_vocab" data-prompt="Can you teach me 3 powerful workplace phrases with examples?">📚 Vocab Boost</button>
+  </div>
+
+  <!-- MAIN INTERACTIVE LAYOUT -->
+  <main class="layout">
+    <!-- CONVERSATION ROOM -->
+    <section class="panel main-stage">
+      <div class="stage-head">
+        <h3><span>🎙️</span> Practice Studio</h3>
+        <div class="status-pill">
+          <i class="dot" id="dot"></i>
+          <span id="statusText">Ready to start</span>
+        </div>
+      </div>
+
+      <!-- ANIMATED ORB STAGE -->
+      <div class="stage-body">
+        <div class="orb-container">
+          <div class="orb-waves" id="orbWaves"></div>
+          <div class="orb state-idle" id="orb">✦</div>
+        </div>
+        <h2 class="stage-title" id="stageTitle">Ready to Practice?</h2>
+        <div class="stage-sub" id="stageSub">Tap "Start Session", speak naturally in English, and VocaBuddy will coach you.</div>
+        <div id="hearingBox" style="display:none;" class="hearing-preview">Hearing: <span id="hearingText"></span></div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="startBtn">🚀 Start Session</button>
+          <button class="btn btn-mic" id="talkBtn" disabled>🎙️ Speak</button>
+          <button class="btn" id="replayBtn" disabled title="Replay VocaBuddy's last spoken response">🔄 Replay Voice</button>
+          <button class="btn btn-stop" id="stopVoiceBtn" disabled title="Stop AI audio playback">⏹️ Stop Audio</button>
+          <button class="btn btn-stop" id="endBtn" disabled>End Session</button>
+        </div>
+      </div>
+
+      <!-- TRANSCRIPT CHAT -->
+      <div class="chat-head">
+        <b>Live Transcript</b>
+        <span id="entryCount">0 messages</span>
+      </div>
+      <div class="chat" id="chat">
+        <div class="bubble note">Your conversation transcript will appear here. Tap Start Session to begin!</div>
+      </div>
+
+      <!-- TEXT COMPOSER FALLBACK -->
+      <form class="composer" id="form">
+        <input id="messageInput" placeholder="Type your response here or speak using the mic…" autocomplete="off" maxlength="3000" disabled>
+        <button class="btn btn-primary" id="sendBtn" disabled>Send</button>
+      </form>
+    </section>
+
+    <!-- SIDEBAR STATS & TOOLS -->
+    <aside class="side">
+      <section class="panel">
+        <h3><span>⏱️</span> Practice Snapshot</h3>
+        <div class="statgrid">
+          <div class="stat">
+            <strong id="timer">00:00</strong>
+            <span>Session Time</span>
+          </div>
+          <div class="stat">
+            <strong id="turns">0</strong>
+            <span>Your Turns</span>
+          </div>
+        </div>
+        <p class="hint" id="snapshot">Start a session to monitor speaking duration and conversation turns.</p>
+      </section>
+
+      <section class="panel">
+        <h3><span>🎯</span> Learning Tools</h3>
+        <button class="tool-btn" id="reviewBtn" disabled>✨ End Session & Report</button>
+        <button class="tool-btn" id="copyBtn" disabled>📋 Copy Full Transcript</button>
+        <button class="tool-btn" id="downloadTranscriptBtn" disabled>💾 Export Transcript (.txt)</button>
+        <p class="hint">Ask for mock interviews, grammar checks, or vocabulary tips at any time.</p>
+      </section>
+
+      <section class="panel">
+        <h3><span>⚡</span> NVIDIA Architecture</h3>
+        <ul class="list">
+          <li><b>Nemotron 3.5 Lightning:</b> Reasoning & conversational coaching engine.</li>
+          <li><b>Magpie Multilingual TTS:</b> High-fidelity natural voice output.</li>
+          <li><b>Multilingual Guidance:</b> English practice with native explanations.</li>
+          <li><b>Turn-Based Audio:</b> Full speaker interruption with instant stop.</li>
+        </ul>
+      </section>
+
+      <div class="notice">
+        <b>Privacy Notice:</b> Voice input is transcribed via your browser's speech recognition engine. AI coaching is powered by NVIDIA NIM endpoints. Do not share confidential or sensitive credentials.
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    VocaBuddy NVIDIA AI Voice Coach (V3.2) · Turn-Based English Practice · Powered by NVIDIA Nemotron & Magpie Multilingual
+  </footer>
+</div>
+
+<!-- LEARNING REPORT MODAL -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3><span>🌟</span> Your English Practice Report</h3>
+      <button class="btn" id="closeModalBtn" style="padding: 6px 12px;">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color: var(--muted); margin-top: 0;">Here is a comprehensive summary of your speaking session:</p>
+      <div class="report-content" id="reportText">Generating your learning report...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="copyReportBtn">📋 Copy Report</button>
+      <button class="btn" id="downloadReportBtn">💾 Download (.txt)</button>
+      <button class="btn btn-primary" id="newSessionBtn">🔄 Start New Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let history = [];
+let running = false;
+let listening = false;
+let recognition = null;
+let currentAudio = null;
+let audioUrl = null;
+let lastSpokenText = "";
+let sessionStartTime = 0;
+let clockInterval = null;
+let turnsCount = 0;
+
+const getPrefs = () => ({
+  language: $("language").value,
+  track: $("track").value,
+  level: $("level").value
+});
+
+function showToast(message, type = "info") {
+  const container = $("toastContainer");
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span>${type === "error" ? "⚠️" : type === "success" ? "✅" : "ℹ️"}</span><div>${message}</div>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(10px)";
+    setTimeout(() => toast.remove(), 300);
+  }, 4500);
+}
+
+function setOrbState(state) {
+  const orb = $("orb");
+  orb.className = "orb state-" + state;
+  const dot = $("dot");
+  dot.className = "dot";
+  if (state === "listening") dot.classList.add("mic");
+  else if (state === "thinking") dot.classList.add("thinking");
+  else if (state === "speaking") dot.classList.add("speaking");
+  else if (running) dot.classList.add("live");
+}
+
+function setStage(title, sub, status = "Ready", orbState = "idle") {
+  $("stageTitle").textContent = title;
+  $("stageSub").textContent = sub;
+  $("statusText").textContent = status;
+  setOrbState(orbState);
+}
+
+function addNote(text) {
+  const div = document.createElement("div");
+  div.className = "bubble note";
+  div.textContent = text;
+  $("chat").appendChild(div);
+  scrollChat();
+}
+
+function addBubble(role, text) {
+  const div = document.createElement("div");
+  div.className = "bubble " + (role === "user" ? "user" : "ai");
+
+  const tag = document.createElement("div");
+  tag.className = "bubble-tag";
+  tag.innerHTML = `<span>${role === "user" ? "YOU" : "VOCABUDDY"}</span>`;
+
+  if (role === "assistant") {
+    const replayBtn = document.createElement("button");
+    replayBtn.className = "replay-bubble-btn";
+    replayBtn.innerHTML = "🔊 Replay";
+    replayBtn.title = "Listen to this reply";
+    replayBtn.onclick = () => playVoice(text);
+    tag.appendChild(replayBtn);
+  }
+
+  const body = document.createElement("span");
+  body.textContent = text;
+
+  div.append(tag, body);
+  $("chat").appendChild(div);
+  scrollChat();
+}
+
+function scrollChat() {
+  const chat = $("chat");
+  chat.scrollTop = chat.scrollHeight;
+  $("entryCount").textContent = `${history.length} messages`;
+}
+
+function updateClock() {
+  if (!sessionStartTime) return;
+  const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
+  const secs = String(elapsed % 60).padStart(2, "0");
+  $("timer").textContent = `${mins}:${secs}`;
+}
+
+function enableControls(enabled) {
+  $("talkBtn").disabled = !enabled;
+  $("endBtn").disabled = !enabled;
+  $("reviewBtn").disabled = !enabled;
+  $("copyBtn").disabled = !enabled;
+  $("downloadTranscriptBtn").disabled = !enabled;
+  $("messageInput").disabled = !enabled;
+  $("sendBtn").disabled = !enabled;
+  if (!enabled) {
+    $("stopVoiceBtn").disabled = true;
+    $("replayBtn").disabled = true;
+  }
+}
+
+// STOP & INTERRUPT AUDIO
+function stopVoice() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if (audioUrl) {
+    URL.revokeObjectURL(audioUrl);
+    audioUrl = null;
+  }
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+  }
+  $("stopVoiceBtn").disabled = true;
+  if (running && !listening) {
+    setStage("Your turn", "Tap Speak or type a response. Feel free to interrupt whenever you want.", "Listening ready", "idle");
+  }
+}
+
+// BROWSER TTS FALLBACK
+function fallbackSpeak(text) {
+  const langMap = {
+    English: "en-IN",
+    Hindi: "hi-IN",
+    Gujarati: "gu-IN",
+    Marathi: "mr-IN",
+    Bengali: "bn-IN",
+    Tamil: "ta-IN",
+    Telugu: "te-IN",
+    Kannada: "kn-IN",
+    Malayalam: "ml-IN",
+    Punjabi: "pa-IN"
+  };
+  const locale = langMap[getPrefs().language] || "en-IN";
+
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = locale;
+    utterance.rate = 0.95;
+    utterance.onstart = () => {
+      $("stopVoiceBtn").disabled = false;
+      $("replayBtn").disabled = false;
+      setStage("VocaBuddy speaking", "Listening to browser voice fallback...", "Speaking (Browser)", "speaking");
+    };
+    utterance.onend = () => {
+      $("stopVoiceBtn").disabled = true;
+      if (running) setStage("Your turn", "Tap Speak or type your reply.", "Ready", "idle");
+    };
+    utterance.onerror = () => {
+      $("stopVoiceBtn").disabled = true;
+      if (running) setStage("Your turn", "Audio playback finished.", "Ready", "idle");
+    };
+    speechSynthesis.speak(utterance);
+  } else {
+    $("stopVoiceBtn").disabled = true;
+    setStage("Your turn", "Audio playback unavailable. Continue by speaking or typing.", "Ready", "idle");
+  }
+}
+
+// PLAY SYNTHETIC VOICE (NVIDIA MAGPIE)
+async function playVoice(text) {
+  if (!text) return;
+  stopVoice();
+  lastSpokenText = text;
+  $("stopVoiceBtn").disabled = false;
+  $("replayBtn").disabled = false;
+
+  try {
+    const response = await fetch("/api/speech", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, preferences: getPrefs() })
+    });
+
+    const contentType = response.headers.get("Content-Type") || "";
+    if (contentType.includes("application/json")) {
+      const data = await response.json();
+      if (data.fallbackToBrowser) {
+        fallbackSpeak(text);
+        return;
+      }
+      throw new Error(data.error || "NVIDIA speech generation failed.");
+    }
+
+    if (!response.ok) {
+      throw new Error("Speech synthesis request failed (" + response.status + ")");
+    }
+
+    const blob = await response.blob();
+    audioUrl = URL.createObjectURL(blob);
+    currentAudio = new Audio(audioUrl);
+
+    currentAudio.onended = () => {
+      stopVoice();
+      if (running) {
+        setStage("Your turn", "Tap Speak or type your reply.", "Listening ready", "idle");
+      }
+    };
+
+    currentAudio.onerror = () => {
+      stopVoice();
+      fallbackSpeak(text);
+    };
+
+    await currentAudio.play();
+    const voiceUsed = response.headers.get("X-VocaBuddy-Voice") || "Magpie Multilingual";
+    setStage("VocaBuddy is speaking", `Playing audio via NVIDIA Magpie (${voiceUsed}). You can tap Stop to interrupt.`, "Speaking (NVIDIA Magpie)", "speaking");
+  } catch (error) {
+    console.warn("Magpie audio error:", error.message);
+    fallbackSpeak(text);
+  }
+}
+
+// SEND MESSAGE TO TUTOR
+async function askTutor(text, isReport = false) {
+  if (!running || !text.trim()) return;
+  const clean = text.trim();
+
+  if (!isReport) {
+    addBubble("user", clean);
+    history.push({ role: "user", content: clean });
+    turnsCount++;
+    $("turns").textContent = turnsCount;
+    $("snapshot").textContent = `Conversation active. You've completed ${turnsCount} speaking turns.`;
+  }
+
+  // Allow interrupting/stopping while thinking or speaking
+  $("talkBtn").disabled = true;
+  $("sendBtn").disabled = true;
+  $("messageInput").disabled = true;
+  setStage(isReport ? "Compiling Report…" : "Thinking…", "VocaBuddy is preparing a response with NVIDIA Nemotron.", "NVIDIA Nemotron", "thinking");
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: clean,
+        history: history.slice(0, isReport ? history.length : -1),
+        preferences: getPrefs()
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || "NVIDIA chat request failed.");
+    }
+
+    const reply = data.reply;
+    history.push({ role: "assistant", content: reply });
+
+    if (isReport) {
+      openReportModal(reply);
+      addBubble("assistant", "🌟 I have compiled your English Practice Report! You can review the strengths, improvements, and practice goals in the report window.");
+      setStage("Session Report Ready", "Review your personalized feedback and recommendations.", "Report Complete", "idle");
+      playVoice("Here is your English practice report with your strengths and key areas for improvement. You can review all details on screen!");
+    } else {
+      addBubble("assistant", reply);
+      setStage("VocaBuddy replied", "Generating natural speech with NVIDIA Magpie…", "NVIDIA Magpie", "speaking");
+      await playVoice(reply);
+    }
+  } catch (error) {
+    showToast(error.message, "error");
+    addNote("Error: " + error.message);
+    setStage("Something went wrong", "Check your internet connection and NVIDIA API settings.", "Error", "idle");
+  } finally {
+    if (running) {
+      $("talkBtn").disabled = false;
+      $("sendBtn").disabled = false;
+      $("messageInput").disabled = false;
+      $("messageInput").focus();
+    }
+  }
+}
+
+// MICROPHONE & SPEECH RECOGNITION
+function startListening() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast("Speech recognition is not supported in this browser. Please use Google Chrome or type your answer.", "error");
+    addNote("Speech recognition unsupported. You can type in the box below.");
+    return;
+  }
+
+  if (!running) return;
+
+  // If already listening, stop listening and submit what was heard
+  if (listening) {
+    if (recognition) {
+      recognition.stop();
+    }
+    return;
+  }
+
+  stopVoice();
+
+  try {
+    recognition = new SR();
+    recognition.lang = "en-IN";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+  } catch (err) {
+    showToast("Could not initialize microphone. Please check permissions.", "error");
+    return;
+  }
+
+  listening = true;
+  $("talkBtn").textContent = "⏹️ Stop Speaking";
+  $("talkBtn").classList.add("active-listening");
+  $("hearingBox").style.display = "inline-block";
+  $("hearingText").textContent = "Listening...";
+  setStage("Listening to you…", "Speak clearly in English. Tap 'Stop Speaking' when done.", "Microphone active", "listening");
+
+  let recordedFinal = "";
+
+  recognition.onresult = event => {
+    let interim = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        recordedFinal += event.results[i][0].transcript;
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    const current = recordedFinal || interim || "Listening...";
+    $("hearingText").textContent = current;
+    $("stageSub").textContent = current;
+  };
+
+  recognition.onerror = event => {
+    console.warn("Speech recognition error:", event.error);
+    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+      showToast("Microphone access blocked. Click the lock icon in your browser address bar to allow microphone.", "error");
+    } else if (event.error !== "no-speech") {
+      showToast("Speech recognition error: " + event.error, "error");
+    }
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    $("talkBtn").textContent = "🎙️ Speak";
+    $("talkBtn").classList.remove("active-listening");
+    $("hearingBox").style.display = "none";
+
+    const speechText = recordedFinal.trim();
+    if (speechText) {
+      askTutor(speechText);
+    } else if (running) {
+      setStage("Didn't catch that", "Tap Speak again or type your answer in the box below.", "Ready", "idle");
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    listening = false;
+    $("talkBtn").textContent = "🎙️ Speak";
+    $("talkBtn").classList.remove("active-listening");
+    $("hearingBox").style.display = "none";
+    showToast("Could not start microphone. Check browser permissions.", "error");
+  }
+}
+
+// SESSION MANAGEMENT
+async function startSession() {
+  try {
+    const health = await fetch("/api/health").then(r => r.json());
+    if (!health.nvidiaConfigured) {
+      showToast("NVIDIA_API_KEY is not configured in .env on the server.", "error");
+      addNote("Please configure NVIDIA_API_KEY in the server .env file.");
+      return;
+    }
+  } catch (err) {
+    showToast("Server connection failed. Is the server running?", "error");
+    return;
+  }
+
+  history = [];
+  turnsCount = 0;
+  running = true;
+  sessionStartTime = Date.now();
+  $("turns").textContent = "0";
+  $("chat").innerHTML = "";
+  enableControls(true);
+  $("startBtn").disabled = true;
+  $("startBtn").textContent = "Session Active";
+  $("track").disabled = $("level").disabled = $("language").disabled = true;
+
+  if (clockInterval) clearInterval(clockInterval);
+  clockInterval = setInterval(updateClock, 1000);
+
+  addNote("Session started · NVIDIA Nemotron 3.5 + Magpie Multilingual");
+
+  const selectedTrack = $("track").value;
+  let starterPrompt = "Start the English practice session. Greet me warmly and naturally in one short sentence. Introduce yourself as my English coach and ask one simple opening question.";
+  if (selectedTrack === "interview") {
+    starterPrompt = "Start a job interview practice session. Greet me warmly as the interviewer, state the role, and ask the first classic interview question.";
+  } else if (selectedTrack === "meeting") {
+    starterPrompt = "Start a business meeting practice session. Set the quick meeting context and ask for my status update.";
+  } else if (selectedTrack === "presentation") {
+    starterPrompt = "Start a presentation coaching session. Ask me what topic I want to pitch or present today.";
+  } else if (selectedTrack === "roleplay") {
+    starterPrompt = "Start a real-life English role-play scenario. Set the stage briefly and ask your opening question in character.";
+  } else if (selectedTrack === "grammar_vocab") {
+    starterPrompt = "Start a grammar and vocabulary booster session. Welcome me warmly and ask me what sentence or topic we should work on.";
+  }
+
+  await askTutor(starterPrompt);
+}
+
+function endSession() {
+  if (recognition) {
+    try { recognition.abort(); } catch (e) {}
+    recognition = null;
+  }
+  listening = false;
+  stopVoice();
+  running = false;
+
+  if (clockInterval) clearInterval(clockInterval);
+  clockInterval = null;
+
+  enableControls(false);
+  $("startBtn").disabled = false;
+  $("startBtn").textContent = "🚀 Start Session";
+  $("track").disabled = $("level").disabled = $("language").disabled = false;
+
+  setStage("Session Ended", "You completed your practice session. Review your transcript or start a new session.", "Ready", "idle");
+  addNote("Session ended.");
+  $("snapshot").textContent = `Session finished! You completed ${turnsCount} speaking turns in ${$("timer").textContent}.`;
+}
+
+// REPORT MODAL LOGIC
+function openReportModal(reportContent) {
+  $("reportText").textContent = reportContent;
+  $("reportModal").classList.add("open");
+}
+
+function closeReportModal() {
+  $("reportModal").classList.remove("open");
+}
+
+function requestReport() {
+  if (!running) {
+    showToast("Please start a session first before generating a report.", "info");
+    return;
+  }
+  askTutor("Please review my English from this entire session and provide a comprehensive learning report with: 1. Communication Strengths, 2. Areas for Improvement, 3. Common Grammar Mistakes and Natural Alternatives, 4. Words Learned and Key Vocabulary, 5. Recommended Next Practice Activity.", true);
+}
+
+// EVENT LISTENERS
+$("startBtn").onclick = startSession;
+$("talkBtn").onclick = startListening;
+$("endBtn").onclick = endSession;
+$("stopVoiceBtn").onclick = () => {
+  stopVoice();
+  setStage("Audio Stopped", "Audio paused. Tap Speak or type your reply.", "Ready", "idle");
+};
+$("replayBtn").onclick = () => {
+  if (lastSpokenText) playVoice(lastSpokenText);
+};
+
+$("form").onsubmit = e => {
+  e.preventDefault();
+  const input = $("messageInput");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  askTutor(text);
+};
+
+$("reviewBtn").onclick = requestReport;
+
+// SCENARIO CHIPS CLICK
+$("scenarioChips").onclick = e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  const track = chip.dataset.track;
+  const prompt = chip.dataset.prompt;
+
+  if (track) $("track").value = track;
+
+  if (!running) {
+    startSession().then(() => {
+      setTimeout(() => askTutor(prompt), 1000);
+    });
+  } else {
+    askTutor(prompt);
+  }
+};
+
+// TRANSCRIPT COPY & EXPORT
+$("copyBtn").onclick = async () => {
+  if (history.length === 0) return;
+  const text = history.map(x => (x.role === "user" ? "You: " : "VocaBuddy: ") + x.content).join("\n\n");
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("Transcript copied to clipboard!", "success");
+  } catch (e) {
+    showToast("Clipboard access denied.", "error");
+  }
+};
+
+$("downloadTranscriptBtn").onclick = () => {
+  if (history.length === 0) return;
+  const text = `VOCABUDDY PRACTICE TRANSCRIPT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\nTurns: ${turnsCount}\n\n` +
+    history.map(x => `[${x.role === "user" ? "YOU" : "VOCABUDDY"}]\n${x.content}\n`).join("\n");
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `VocaBuddy-Transcript-${Date.now()}.txt`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast("Transcript downloaded!", "success");
+};
+
+// REPORT MODAL BUTTONS
+$("closeModalBtn").onclick = closeReportModal;
+$("newSessionBtn").onclick = () => {
+  closeReportModal();
+  endSession();
+  startSession();
+};
+$("copyReportBtn").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($("reportText").textContent);
+    showToast("Learning report copied to clipboard!", "success");
+  } catch (e) {
+    showToast("Failed to copy report.", "error");
+  }
+};
+$("downloadReportBtn").onclick = () => {
+  const text = `VOCABUDDY ENGLISH PRACTICE REPORT\nDate: ${new Date().toLocaleString()}\nDuration: ${$("timer").textContent}\n\n${$("reportText").textContent}`;
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `VocaBuddy-Learning-Report-${Date.now()}.txt`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast("Report downloaded!", "success");
+};
+
+// CLEANUP ON UNLOAD
+window.addEventListener("beforeunload", () => {
+  if (recognition) recognition.abort();
+  stopVoice();
+  if (clockInterval) clearInterval(clockInterval);
+});
+
+// INITIAL HEALTH CHECK
+fetch("/api/health")
+  .then(r => r.json())
+  .then(info => {
+    if (!info.nvidiaConfigured) {
+      setStage("API Key Needed", "Add NVIDIA_API_KEY to server .env file before starting.", "Not Configured", "idle");
+      showToast("NVIDIA API Key is missing. Please add it to your server .env file.", "error");
+    }
+  })
+  .catch(() => {
+    setStage("Server Offline", "Cannot connect to backend server on localhost.", "Offline", "idle");
+  });
+</script>
+</body>
+</html>
